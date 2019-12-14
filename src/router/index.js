@@ -4,6 +4,8 @@ import Home from '../views/Home.vue'
 
 import Login from '../views/Login'
 import UserManagement from "../views/UserManagement"
+import SubjectManagement from "../views/SubjectManagement"
+import ProofList from "../views/ProofList"
 
 Vue.use(VueRouter)
 
@@ -16,6 +18,14 @@ const routes = [
       {
         path:"/userManagement",
         component:UserManagement
+      },
+      { 
+        path:"/subjectManagement",
+        component:SubjectManagement
+      },
+      {
+        path:"/proofList",
+        component:ProofList
       }
 
 

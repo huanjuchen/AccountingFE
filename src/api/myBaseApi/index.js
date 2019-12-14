@@ -30,8 +30,8 @@ export default function baseApi(url, data = {}, type = "GET") {
         let promise = null;
         //1、执行ajax请求
         if (type === "GET") {
-            promise = axios.get(url, {
-                params: data
+            promise = axios.get(url, null, {
+                headers: { "content-type": "application/json;charset=uft-8" }
             });
         } else if (type === "PUT") {
             promise = axios.put(url, data,
@@ -45,7 +45,7 @@ export default function baseApi(url, data = {}, type = "GET") {
             }
             );
         } else {
-            promise = axios.delete(url, data,{
+            promise = axios.delete(url, data, {
                 headers: { "content-type": "application/json;charset=uft-8" }
             });
         }
@@ -62,13 +62,17 @@ export default function baseApi(url, data = {}, type = "GET") {
                         //401：未登录/登录过期
                         Message.error("未登录/登录过期");
                         if (sessionStorage.getItem("token")) {
-                            sessionStorage.setItem("token", null);
+                            sessionStorage.removeItem("token");
                         }
 
+                        if (sessionStorage.getItem("user")) {
+                            sessionStorage.removeItem("user");
+                          }
+
                         router.push({
-                            name:"login",
-                            params:{
-                                lastPath:router.path
+                            name: "login",
+                            params: {
+                                lastPath: router.path
                             }
                         });
                         break;

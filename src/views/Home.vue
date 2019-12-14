@@ -17,7 +17,7 @@
               <span>凭证管理</span>
             </template>
 
-            <el-menu-item index="searchProof">查看凭证</el-menu-item>
+            <el-menu-item index="proofList" @click="pushToAddr('/proofList')">凭证列表  </el-menu-item>
 
             <el-menu-item index="checkProof">凭证审核</el-menu-item>
           </el-submenu>
@@ -36,7 +36,9 @@
             <el-menu-item index="ledgerAccount">总分类账</el-menu-item>
           </el-submenu>
 
-          <el-menu-item index="subjectManagement">科目管理</el-menu-item>
+          <el-menu-item 
+          v-if="user!=null&&(user.role==1||user.role==2)"
+          index="subjectManagement" @click="pushToAddr('/subjectManagement')">科目管理</el-menu-item>
 
           <el-menu-item
             v-if="user!=null&&user.role==1"
@@ -66,7 +68,7 @@
 
           <el-menu-item v-bind:style="{float:'right'}" v-if="user==null">
             <span class="el-dropdown-link">
-              请先登录
+              <router-link to="/login">请先登录</router-link>
               <i class="el-icon-user"></i>
             </span>
           </el-menu-item>

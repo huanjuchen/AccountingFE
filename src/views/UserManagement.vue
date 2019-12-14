@@ -19,7 +19,7 @@
       </el-button>
     </el-card>
 
-    <el-dialog title="添加用户" :visible.sync="dialogFormVisible" width="30%" center>
+    <el-dialog title="添加用户" :visible.sync="dialogFormVisible" width="480px" center>
       <el-form :model="userForm" ref="userForm" :rules="userFormRules">
         <el-form-item prop="username">
           <el-input placeholder="用户名" v-model="userForm.username"></el-input>
@@ -40,13 +40,13 @@
       </div>
     </el-dialog>
 
-    <el-dialog title="创建成功" :visible.sync="userInfoShowDialog" width="30%" center>
+    <el-dialog title="创建成功" :visible.sync="userInfoShowDialog" width="480px" center>
       <div v-if="userInfo!=null">
         <p>
           <b>用户ID：</b>
           {{userInfo.id}}
         </p>
-        <p>
+        <p> 
           <b>用户名：</b>
           {{userInfo.username}}
         </p>
@@ -63,29 +63,38 @@
         </p>
         <p>
           <b>手机号：</b>
-          {{dateFormatter(userInfo.joinTime)}}
+          {{userInfo.phone}}
         </p>
       </div>
     </el-dialog>
+
+    <el-card v-if="userList!=null" :style="{marginTop:2+'%'}">
+      <user-list :userList="userList"/>
+    </el-card>
   </div>
 </template>
 
 <script>
-import { createUserApi } from "../api/userApi";
+import { createUserApi, getUserListApi } from "../api/userApi";
+
+import UserList from "@/components/UserList";
 export default {
   name: "UserManagement",
   data: function() {
     return {
-      searchText: "",
-      dialogFormVisible: false,
-      userInfoShowDialog: false,
-      userInfo: null,
+      searchText: "", //搜索栏数据
+      dialogFormVisible: false, //是否显示新建用户对话框
+      userInfoShowDialog: false, //是否显示用户详细信息对话框
+      userInfo: null, //用于用户详细信息展示的数据
+      userList: null, //传递给子组件的列表的数据
       userForm: {
+        //新建用户对话框的表单数据
         username: "",
         role: null,
         phone: null
       },
       userFormRules: {
+        //表单验证的数据
         username: [
           {
             required: true,
@@ -103,6 +112,9 @@ export default {
       }
     };
   },
+  components: {
+    "user-list": UserList
+  },
 
   //-----
   methods: {
@@ -111,13 +123,15 @@ export default {
       this.dialogFormVisible = false;
       this.$refs[formName].validate(valid => {
         if (valid) {
-          createUserApi(this.userForm.username, this.userForm.role)
+          createUserApi(this.userForm.username, this.userForm.role,this.userForm.phone)
             .then(response => {
               if (response && response.status == 200) {
                 this.userForm.username = null;
                 this.userForm.role = null;
+                this.userForm.phone=null;
                 this.userInfo = response.data.data;
                 this.userInfoShowDialog = true;
+                this.refreshUserList();
               }
             })
             .catch(error => {
@@ -150,7 +164,31 @@ export default {
       return (
         date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate()
       );
+    },
+
+    refreshUserList(){
+        getUserListApi(1)
+        .then(response => {
+          if (response && response.status == 200) {
+            this.userList = response.data.data;
+          }
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    },
+
+    //初始化获取数据
+    init() {
+      this.userInfo = null;
+      this.refreshUserList();
+      
     }
+  },
+  //------
+
+  created: function() {
+    this.init();
   }
 };
 </script>
