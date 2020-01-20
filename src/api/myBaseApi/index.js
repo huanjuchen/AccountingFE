@@ -3,21 +3,25 @@
  * 封装Axios
  * 
  */
-
 import axios from "axios";
 import router from "@/router";
 import { Message } from "element-ui";
+
+
+const urlPrefix="/api";
+
+// const urlPrefix="";
 
 //默认8秒超时
 axios.defaults.timeout = 8000;
 
 // 添加请求拦截器
 axios.interceptors.request.use(config => {
-    let token = null;
-    if (sessionStorage.getItem("token")) {
-        token = sessionStorage.getItem("token");
+    let tokenId = null;
+    if (sessionStorage.getItem("token_id")) {
+        tokenId = sessionStorage.getItem("token_id");
     }
-    config.headers.token = token;
+    config.headers.token_id = tokenId;
     return config;
 });
 
@@ -25,6 +29,7 @@ axios.interceptors.request.use(config => {
 
 
 export default function baseApi(url, data = {}, type = "GET") {
+    url=urlPrefix+url;
 
     return new Promise((resolve) => {
         let promise = null;
@@ -51,40 +56,39 @@ export default function baseApi(url, data = {}, type = "GET") {
         }
 
         //2、如果成功则调用resolve
-        promise.then(respone => {
-            resolve(respone);
+        promise.then(response => {
+            if(response&&response.status==200&&response.data){
+                if(response.data.code==200){
+                    resolve(response);
+                }else if(response.data.code==401){
+                    Message.error("未登录/登录过期");
+                    if (sessionStorage.getItem("token_id")) {
+                        sessionStorage.removeItem("token_id");
+                    }
+
+                    if (sessionStorage.getItem("user")) {
+                        sessionStorage.removeItem("user");
+                    }
+
+                    router.push({
+                        name: "login",
+                        params: {
+                            lastPath: router.path
+                        }
+                    });
+                }else{
+                    Message({
+                        message: response.data.msg+ "\t错误代码：" + response.data.code,
+                        type: "error"
+                    });
+                }   
+            }    
         }).catch(error => {
             console.log(error);
-            // console.log(error.response);
-            if (error && error.response.status) {
-                switch (error.response.status) {
-                    case 401:
-                        //401：未登录/登录过期
-                        Message.error("未登录/登录过期");
-                        if (sessionStorage.getItem("token")) {
-                            sessionStorage.removeItem("token");
-                        }
-
-                        if (sessionStorage.getItem("user")) {
-                            sessionStorage.removeItem("user");
-                          }
-
-                        router.push({
-                            name: "login",
-                            params: {
-                                lastPath: router.path
-                            }
-                        });
-                        break;
-                    default:
-                        Message({
-                            // message: error.response.data.message + "\t错误代码：" + error.response.status,
-                            type: "error"
-                        });
-                        break;
-
-                }
-            }
+            Message({
+                message: "请求出现了一个错误，请稍后重试",
+                type: "error"
+            });
         });
         return promise;
     });

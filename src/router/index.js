@@ -2,10 +2,11 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
 
-import Login from '../views/Login'
+// import Login from '../views/Login'
+import LoginView from "../views/LoginView"
 import UserManagement from "../views/UserManagement"
 import SubjectManagement from "../views/SubjectManagement"
-import ProofList from "../views/ProofList"
+import ProofView from "../views/ProofView"
 
 Vue.use(VueRouter)
 
@@ -24,8 +25,8 @@ const routes = [
         component:SubjectManagement
       },
       {
-        path:"/proofList",
-        component:ProofList
+        path:"/proofView",
+        component:ProofView
       }
 
 
@@ -34,7 +35,7 @@ const routes = [
   {
     path:"/login",
     name:"login",
-    component:Login
+    component:LoginView
   }
 ]
 

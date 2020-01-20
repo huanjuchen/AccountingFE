@@ -8,10 +8,17 @@ export const createSubjectApi=(obj)=>{
     return myBaseApi(subjectBaseApi,JSON.stringify(obj),"POST");
 }
 
-export const getSubjectListApi=(page)=>{
-    return myBaseApi(subjectBaseApi+"?page="+page,null,"GET");
+
+
+export const getSubjectListApi=(params)=>{
+    // return 
+    let url="/api/subject?1=1";
+    for(let k in params){
+        url=url+"&"+k+"="+params[k];
+    }
+
+    return myBaseApi(url,null,"GET");
 }
 
-export const getAvailableSubjectListApi=()=>{
-    return myBaseApi("/api/subject/available/true",null,"GET");
-}
+
+

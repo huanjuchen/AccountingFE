@@ -7,5 +7,10 @@ export const LoginApi=(username,password)=>{
         password:password
     }
 
-    return myBaseApi("/api/login",JSON.stringify(obj),"POST");
+    return myBaseApi("/login",JSON.stringify(obj),"POST");
+}
+
+
+export const LogoutApi=()=>{
+    return myBaseApi("/logout",null,"GET");
 }

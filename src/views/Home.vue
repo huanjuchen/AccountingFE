@@ -1,78 +1,13 @@
 <template>
   <el-container v-bind:style="{height:100+'%'}">
-    <el-aside v-bind:style="{height:100+'%',width:20+'%'}">
-      <div v-bind:style="{height:100+'%',backgroundColor:'#212121'}">
-        <el-menu
-          class="el-menu-vertical-demo"
-          :default-active="activeIndex"
-          background-color="#424242"
-          text-color="#fff"
-          menu-trigger="click"
-        >
-          <el-menu-item></el-menu-item>
-          <el-menu-item index="dashborad">Dashborad</el-menu-item>
-
-          <el-submenu index="1">
-            <template slot="title">
-              <span>凭证管理</span>
-            </template>
-
-            <el-menu-item index="proofList" @click="pushToAddr('/proofList')">凭证列表  </el-menu-item>
-
-            <el-menu-item index="checkProof">凭证审核</el-menu-item>
-          </el-submenu>
-
-          <el-submenu index="2">
-            <template slot="title">
-              <span>查看账簿</span>
-            </template>
-
-            <el-menu-item index="cashAccount">现金日记账</el-menu-item>
-
-            <el-menu-item index="bankAccount">银行日记账</el-menu-item>
-
-            <el-menu-item index="subAccount">明细分类账</el-menu-item>
-
-            <el-menu-item index="ledgerAccount">总分类账</el-menu-item>
-          </el-submenu>
-
-          <el-menu-item 
-          v-if="user!=null&&(user.role==1||user.role==2)"
-          index="subjectManagement" @click="pushToAddr('/subjectManagement')">科目管理</el-menu-item>
-
-          <el-menu-item
-            v-if="user!=null&&user.role==1"
-            index="userManagement"
-            @click="pushToAddr('/userManagement')"
-          >用户管理</el-menu-item>
-
-          <el-menu-item index="userCenter">个人中心</el-menu-item>
-        </el-menu>
-      </div>
+    <el-aside v-bind:style="{height:100+'%',width:245+'px'}">
+      <!-- 左栏 -->
+      <left-bar />
     </el-aside>
     <el-container>
       <el-header>
-        <el-menu mode="horizontal">
-          <el-menu-item v-bind:style="{float:'right'}" v-if="user!=null">
-            <el-dropdown @command="handleCommand">
-              <span class="el-dropdown-link">
-                {{user.username}}
-                <i class="el-icon-user"></i>
-              </span>
-              <el-dropdown-menu slot="dropdown">
-                <el-dropdown-item command="userCenter">个人中心</el-dropdown-item>
-                <el-dropdown-item command="userLogout">退出登录</el-dropdown-item>
-              </el-dropdown-menu>
-            </el-dropdown>
-          </el-menu-item>
-
-          <el-menu-item v-bind:style="{float:'right'}" v-if="user==null">
-            <span class="el-dropdown-link">
-              <router-link to="/login">请先登录</router-link>
-              <i class="el-icon-user"></i>
-            </span>
-          </el-menu-item>
-        </el-menu>
+        <!-- 顶栏 -->
+        <top-bar />
       </el-header>
       <el-main>
         <router-view />
@@ -83,6 +18,9 @@
 </template>
 
 <script>
+import TopBar from "../components/home/TopBar";
+import LeftBar from "../components/home/LeftBar";
+
 export default {
   name: "home",
   //----
@@ -91,6 +29,11 @@ export default {
       user: null,
       activeIndex: "dashborad"
     };
+  },
+
+  components: {
+    "top-bar": TopBar,
+    "left-bar": LeftBar
   },
   //----
   methods: {
@@ -105,52 +48,11 @@ export default {
       return (
         date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate()
       );
-    },
-    handleCommand(command) {
-
-      if (command == "userLogout") {
-        this.logout();
-      }
-
-      if(command=="userCenter"){
-        console.log("跳转到个人中心");
-        
-      }
-    },
-    logout() {
-      if (sessionStorage.getItem("token")) {
-        sessionStorage.removeItem("token");
-      }
-
-      if (sessionStorage.getItem("user")) {
-        sessionStorage.removeItem("user");
-      }
-
-      this.$router.push("/login").catch(error=>{
-        console.log(error);
-        
-      });
-      this.$message.info("已退出登录");
-    },
-
-    pushToAddr(addr) {
-      this.$router.push(addr).catch(error=>{
-        console.log(error);
-        
-      });
-    },
-    changeIndex() {
-      let path = this.$route.path;
-      this.activeIndex = path.substring(1, path.length);
     }
   },
   //-----
   created: function() {
     this.init();
-    this.changeIndex();
-  },
-  beforeUpdate() {
-    this.changeIndex();
   }
 };
 </script>
