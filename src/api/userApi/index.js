@@ -5,7 +5,7 @@ let url="/admin/user"
 export const createUserApi=(user)=>{
 
     return myBaseApi(url,JSON.stringify(user),"POST");
-}
+};
 
 export const getUserListApi=(page,pageSize,selectWord,valid,desc)=>{
     let queryParam="";
@@ -32,11 +32,19 @@ export const getUserListApi=(page,pageSize,selectWord,valid,desc)=>{
 
 
     return myBaseApi(url+"?"+queryParam,null,"GET");
-}
+};
 
 
 export const resetPwdApi=(userId)=>{
 
 
     return myBaseApi(url+"/resetPwd?userId="+userId,null,"PUT");
-}
+};
+
+export const lockUserApi=(userId)=>{
+    return myBaseApi(url+"/lock?userId="+userId,null,"PUT");
+};
+
+export const unlockUserApi=(userId)=>{
+    return myBaseApi(url+"/unlock?userId="+userId,null,"PUT");
+};
