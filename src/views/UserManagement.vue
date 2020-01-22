@@ -14,7 +14,7 @@
                 <i class="el-icon-warning-outline"></i>
                 重 置
             </el-button>
-            <el-button size="medium" type="primary" @click="showCreateDialog()">
+            <el-button size="medium" type="primary" @click="showCreateDialog">
                 <i class="el-icon-plus"></i> 添 加
             </el-button>
         </el-card>
@@ -28,8 +28,9 @@
         </el-dialog>
 
         <el-card v-if="userList!=null" :style="{marginTop:2+'%'}">
-            <user-list :userList="userList" :list-loading="listLoading" @resetPwd="doResetPwd"
-                       @lockUser="doLockUser" @unlockUser="doUnlockUser"/>
+            <user-list :userList="userList" :list-loading="listLoading" :user-count="userCount"
+                       @changePage="doChangePage" @changePageSize="doChangePageSize"
+                       @resetPwd="doResetPwd" @lockUser="doLockUser" @unlockUser="doUnlockUser"/>
         </el-card>
     </div>
 </template>
@@ -38,7 +39,8 @@
     import UserCreate from "../components/userManagement/UserCreate";
     import UserDetail from "../components/userManagement/UserDetail";
 
-    import {getUserListApi, resetPwdApi, lockUserApi,unlockUserApi} from "../api/userApi";
+    import {getUserListApi, resetPwdApi, 
+        lockUserApi, unlockUserApi, userCountApi} from "../api/userApi";
 
     import UserList from "../components/userManagement/UserList";
 
@@ -52,12 +54,11 @@
                 userInfo: null, //用于用户详细信息展示的数据
                 userList: [], //传递给子组件的列表的数据
                 page: 1,
-                pageSize: 10,
+                pageSize: 5,
                 desc: true,
                 valid: null,
-                listLoading:false
-
-
+                listLoading: false,
+                userCount: 0 //满足查询条件的用户总数
             };
         },
         components: {
@@ -75,75 +76,101 @@
                 this.dialogFormVisible = true;
             },
 
+            doChangePage(val){
+                this.page=val;
+                this.refreshUserList();
+            },
+
+            doChangePageSize(val){
+                this.pageSize=val;
+                this.refreshUserList();
+            },
+
             cancelCreate() {
                 this.dialogFormVisible = false;
             },
 
             doSearch() {
                 this.refreshUserList();
+                this.refreshCount();
             },
+
             doReset() {
                 this.searchText = "";
                 this.refreshUserList();
+                this.refreshCount();
             },
 
+            //密码重置
             doResetPwd(userId) {
                 resetPwdApi(userId).then(response => {
                     if (response) {
                         if (response.data.code === 200) {
                             this.$message.success("重置成功!");
                         }
-
-
                     }
                 });
             },
+            //禁用用户
             doLockUser(userId) {
-                lockUserApi(userId).then(response=>{
-                   if (response){
-                       if (response.data.code===200){
-                           this.$message.success("禁用成功")
-                           this.refreshUserList();
-                       }
-                   }
-                });
-
-            },
-            doUnlockUser(userId){
-                unlockUserApi(userId).then(response=>{
-                    if (response){
-                        if (response.data.code===200){
-                            this.$message.success("启用成功")
+                lockUserApi(userId).then(response => {
+                    if (response) {
+                        if (response.data.code === 200) {
+                            this.$message.success("禁用成功");
                             this.refreshUserList();
+                            this.refreshCount();
                         }
                     }
                 });
 
             },
+            //启用用户
+            doUnlockUser(userId) {
+                unlockUserApi(userId).then(response => {
+                    if (response) {
+                        if (response.data.code === 200) {
+                            this.$message.success("启用成功");
+                            this.refreshUserList();
+                            this.refreshCount();
+                        }
+                    }
+                });
 
+            },
+            //创建成功时调用
             createSuccess(user) {
                 this.userInfo = user;
                 this.dialogFormVisible = false;
-
                 this.userInfo = user;
                 this.userInfoShowDialog = true;
                 this.refreshUserList();
-
-
+                this.refreshCount();
             },
 
             refreshUserList() {
-                this.listLoading=true;
+                this.listLoading = true;
                 getUserListApi(this.page, this.pageSize, this.searchText, this.valid, this.desc)
                     .then(response => {
                         if (response) {
                             this.userList = response.data.data;
                         }
-                        this.listLoading=false;
+                        this.listLoading = false;
                     })
                     .catch(error => {
                         console.log(error);
-                        this.listLoading=false;
+                        this.listLoading = false;
+                    });
+            },
+            
+            
+            refreshCount(){
+                userCountApi(this.searchText,this.valid)
+                    .then(response=>{
+                       if (response){
+                           if (response.data.code===200){
+                               this.userCount=response.data.data;
+                           }
+                       }  
                     });
             },
 
@@ -151,6 +178,7 @@
             init() {
                 this.userInfo = null;
                 this.refreshUserList();
+                this.refreshCount();
             }
         },
         //------

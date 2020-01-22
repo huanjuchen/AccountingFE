@@ -1,5 +1,5 @@
 <template>
-  <div>
+
     <el-form :model="userForm" ref="userForm" :rules="userFormRules">
       <el-form-item prop="username">
         <el-input placeholder="登录名" v-model="userForm.username"></el-input>
@@ -24,7 +24,6 @@
         </div>
       </el-form-item>
     </el-form>
-  </div>
 </template>
 
 <script>
@@ -70,7 +69,6 @@ export default {
 
   methods: {
     submitForm(formName) {
-      this.dialogFormVisible = false;
       this.$refs[formName].validate(valid => {
         if (valid) {
           createUserApi(this.userForm)
