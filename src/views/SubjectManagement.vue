@@ -3,11 +3,11 @@
         <el-card>
             <el-input
                     size="medium"
-                    placeholder="请输入查找的科目名..."
+                    placeholder="请输入查找的科目名或科目代码..."
                     v-model="searchText"
                     v-bind:style="{width:40+'%'}"
             ></el-input>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            <el-button size="medium" type="primary">
+            <el-button size="medium" type="primary" @click="doSearch">
                 <i class="el-icon-search"></i> 搜 索
             </el-button>
             <el-button size="medium" type="primary">
@@ -20,42 +20,85 @@
         </el-card>
 
         <el-card :style="{marginTop:2+'%'}">
-<!--            <subject-list :subjectList="subjectList" v-if="subjectList!=null"/>-->
+            <subject-list @edit="doEdit" :subject-count="subjectCount" :subjectList="subjectList" v-if="subjectList!=null"/>
         </el-card>
 
         <el-dialog title="创建科目" :visible.sync="dialogFormVisible" width="480px" center>
             <subject-create @createSuccess="doCreateSuccess" @createCancel="doCancel"/>
         </el-dialog>
+
+        <el-dialog @close="doUpdateCancel" title="修改科目" :visible.sync="editDialog" width="480px" center>
+            <subject-edit :edit-id="editId" @updateSuccess="doUpdateSuccess"
+                          @updateCancel="doUpdateCancel"/>
+        </el-dialog>
+
     </div>
 </template>
 
 <script>
-    import SubjectCreate from "../components/subjectManagement/SubjectCreate"
-    // import { createSubjectApi, getSubjectListApi } from "../api/subjectApi";
-    // import SubjectList from "../components/SubjectList";
+    import SubjectCreate from "../components/subjectManagement/SubjectCreate";
+    import SubjectList from "../components/subjectManagement/SubjectList";
+    import SubjectEdit from "../components/subjectManagement/SubjectEdit"
+
+    import {getSubjectListApi, countSubjectApi} from "../api/subjectApi";
 
     export default {
         name: "SubjectManagement",
         data: function () {
             return {
                 dialogFormVisible: false,
+                editDialog: false,
                 searchText: null,
                 subjectList: null,
                 subject: null,
-                page: 1
+                page: 1,
+                pageSize: 7,
+                desc: null,
+                selectType: "all",
+                editId: null,
+                subjectCount: 0
             }
         },
         components: {
-            // "subject-list": SubjectList,
-            "subject-create": SubjectCreate
+            "subject-create": SubjectCreate,
+            "subject-list": SubjectList,
+            "subject-edit": SubjectEdit
         },
         methods: {
             showCreateDialog() {
                 this.dialogFormVisible = true;
             },
 
+
+            doEdit(val) {
+                this.editId = val;
+                this.editDialog = true;
+
+            },
+
+            doUpdateSuccess() {
+                this.$message.success("修改成功");
+                this.editDialog = false;
+                this.refreshSubjectList();
+            },
+
+            doUpdateCancel() {
+                this.editDialog = false;
+            },
+
             doCancel() {
-                this.dialogFormVisible=false;
+                this.dialogFormVisible = false;
+            },
+
+            doSearch() {
+                this.refreshSubjectList();
+            },
+
+            doReset() {
+                this.page = 1;
+                this.pageSize = 7;
+                this.searchText = "";
+                this.refreshSubjectList();
             },
 
             doCreateSuccess(subject) {
@@ -63,36 +106,31 @@
                     "科目 " + subject.name + " 创建成功"
                 );
                 this.subject = subject;
-                this.dialogFormVisible=false;
-                // this.refreshSubjectList();
+                this.dialogFormVisible = false;
+                this.refreshSubjectList();
             },
             refreshSubjectList() {
-                // let offset=0;
-                // if(this.page!=0){
-                //   offset=(this.page-1)*20;
-                // }
-                // let params={
-                //   offset:offset,
-                //   count:20
-                // }
-                // getSubjectListApi(params)
-                //   .then(response => {
-                //     // console.log(response);
-                //     if (response && response.status == 200) {
-                //       this.subjectList = response.data.data;
-                //     }
-                //   })
-                //   .catch(error => {
-                //     console.log(error);
-                //   });
+                getSubjectListApi(this.searchText, null,
+                    this.desc, this.selectType, this.page, this.pageSize)
+                    .then(response => {
+                        if (response && response.data.code === 200) {
+                            this.subjectList = response.data.data;
+                        }
+                    })
+            },
+            getSubjectCount() {
+                countSubjectApi(this.searchText, null)
+                    .then(response => {
+                        if (response && response.data.code === 200) {
+                            this.subjectCount = this.data.data;
+                        }
+                    });
             },
 
             init() {
-                // this.refreshSubjectList();
+                this.refreshSubjectList();
             }
         },
-        computed: {},
-        //-----
         created: function () {
             this.init();
         }

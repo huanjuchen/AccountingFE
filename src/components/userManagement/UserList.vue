@@ -11,9 +11,9 @@
                 <template slot-scope="scope">{{$utils.getRole(scope.row.role)}}</template>
             </el-table-column>
 
-            <el-table-column label="是否启用">
+            <el-table-column label="状态">
                 <template slot-scope="scope">
-                    {{$utils.boolean2Hanzi(scope.row.valid)}}
+                    {{$utils.getState(scope.row.valid)}}
                 </template>
             </el-table-column>
 

@@ -18,7 +18,7 @@ export const getUserListApi = (page, pageSize, selectWord, valid, desc) => {
     if (selectWord && selectWord.length > 0) {
         queryParam = queryParam + "&selectWord=" + selectWord;
     }
-    if (valid) {
+    if (valid!=null) {
         queryParam = queryParam + "&valid=" + valid;
     }
     if (desc) {

@@ -18,10 +18,34 @@ export const getRole=(val)=>{
       }
 };
 
-export const boolean2Hanzi=(val)=>{
+export const getState=(val)=>{
     if(val){
-        return "是";
+        return "启用";
     }else{
-        return "否"
+        return "禁用"
+    }
+};
+
+export const getSubjectCategory=(val)=>{
+    if (val === 1) {
+        return "资产类";
+    } else if (val === 2) {
+        return "负债类";
+    } else if (val === 3) {
+        return "共同类";
+    } else if (val === 4) {
+        return "所有者权益类";
+    } else if (val === 5) {
+        return "成本类";
+    } else if (val === 6) {
+        return "损益类";
+    }
+};
+
+export const getDaysKind=(val)=>{
+    if (val === 1) {
+        return "现金类";
+    } else if (val === 2) {
+        return "银行类";
     }
 };
