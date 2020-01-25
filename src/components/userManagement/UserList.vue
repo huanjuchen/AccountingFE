@@ -39,7 +39,7 @@
                     @current-change="changePage"
                     @size-change="changePageSize"
                     :page-sizes="[5,10,15]"
-                    :page-size="5"
+                    :page-size="pageSize"
                     :pager-count="5"
                     layout="prev, pager, next ,sizes,total"
                     :total="userCount">
@@ -57,7 +57,7 @@
 
     export default {
         name: "UserList",
-        props: ["userList", "listLoading", "userCount"],
+        props: ["userList","pageSize", "listLoading", "userCount"],
         //-----
         data: function () {
             return {

@@ -28,7 +28,7 @@
         </el-dialog>
 
         <el-card v-if="userList!=null" :style="{marginTop:2+'%'}">
-            <user-list :userList="userList" :list-loading="listLoading" :user-count="userCount"
+            <user-list :userList="userList" :page-size="pageSize" :list-loading="listLoading" :user-count="userCount"
                        @changePage="doChangePage" @changePageSize="doChangePageSize"
                        @resetPwd="doResetPwd" @lockUser="doLockUser" @unlockUser="doUnlockUser"/>
         </el-card>
@@ -97,6 +97,7 @@
 
             doReset() {
                 this.searchText = "";
+                this.page=1;
                 this.refreshUserList();
                 this.refreshCount();
             },

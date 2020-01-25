@@ -10,7 +10,7 @@
             <el-button size="medium" type="primary" @click="doSearch">
                 <i class="el-icon-search"></i> 搜 索
             </el-button>
-            <el-button size="medium" type="primary">
+            <el-button size="medium" type="primary" @click="doReset">
                 <i class="el-icon-warning-outline"></i>
                 重 置
             </el-button>
@@ -20,7 +20,9 @@
         </el-card>
 
         <el-card :style="{marginTop:2+'%'}">
-            <subject-list @edit="doEdit" :subject-count="subjectCount" :subjectList="subjectList" v-if="subjectList!=null"/>
+            <subject-list @edit="doEdit" @changePage="doChangePage" @changePageSize="doChangePageSize"
+                          :subject-count="subjectCount" :subjectList="subjectList"
+                          :loading="tableLoading" :page-size="pageSize" v-if="subjectList!=null"/>
         </el-card>
 
         <el-dialog title="创建科目" :visible.sync="dialogFormVisible" width="480px" center>
@@ -53,10 +55,11 @@
                 subject: null,
                 page: 1,
                 pageSize: 7,
-                desc: null,
+                desc: "code",
                 selectType: "all",
                 editId: null,
-                subjectCount: 0
+                subjectCount: 0,
+                tableLoading:false
             }
         },
         components: {
@@ -67,6 +70,19 @@
         methods: {
             showCreateDialog() {
                 this.dialogFormVisible = true;
+            },
+
+
+            doChangePage(val) {
+                this.page = val;
+                this.refreshSubjectList();
+
+            },
+
+            doChangePageSize(val) {
+                this.pageSize = val;
+                this.refreshSubjectList();
+
             },
 
 
@@ -91,13 +107,15 @@
             },
 
             doSearch() {
+                this.getSubjectCount();
                 this.refreshSubjectList();
             },
 
             doReset() {
                 this.page = 1;
-                this.pageSize = 7;
+                // this.pageSize = 7;
                 this.searchText = "";
+                this.getSubjectCount();
                 this.refreshSubjectList();
             },
 
@@ -107,27 +125,32 @@
                 );
                 this.subject = subject;
                 this.dialogFormVisible = false;
+                this.getSubjectCount();
                 this.refreshSubjectList();
             },
             refreshSubjectList() {
+                this.tableLoading=true;
                 getSubjectListApi(this.searchText, null,
                     this.desc, this.selectType, this.page, this.pageSize)
                     .then(response => {
                         if (response && response.data.code === 200) {
                             this.subjectList = response.data.data;
                         }
+                        this.tableLoading=false;
                     })
             },
             getSubjectCount() {
                 countSubjectApi(this.searchText, null)
                     .then(response => {
                         if (response && response.data.code === 200) {
-                            this.subjectCount = this.data.data;
+                            this.subjectCount = response.data.data;
                         }
                     });
             },
 
             init() {
+                this.getSubjectCount();
+
                 this.refreshSubjectList();
             }
         },

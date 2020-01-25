@@ -21,8 +21,9 @@
 
             <el-form-item prop="daysKind" label="日记账">
                 <el-select :disabled="!daysKindEnable" size="small" v-model="subjectObj.daysKind">
-                    <el-option label="现金类" value="1"></el-option>
-                    <el-option label="银行类" value="2"></el-option>
+                    <el-option v-for="item in daysKinds" :key="item.value" :label="item.label"
+                               :value="item.value"></el-option>
+
                 </el-select>
             </el-form-item>
 
@@ -58,7 +59,7 @@
                     code: "",
                     name: "",
                     category: null,
-                    daysKind: "",
+                    daysKind: 0,
                     remark: ""
                 },
                 daysKindEnable: false,
@@ -103,6 +104,21 @@
                         value: 6
                     }
                 ],
+
+                daysKinds: [
+                    {
+                        label: "现金类",
+                        value: 1
+                    },
+                    {
+                        label: "银行类",
+                        value: 2
+                    },
+                    {
+                        label:"其他",
+                        value:0
+                    }
+                ]
             }
         },
 
@@ -117,11 +133,11 @@
                             .then(response => {
                                 if (response && response.data.code === 200) {
                                     this.$emit("createSuccess", response.data.data);
-                                    this.subjectObj.id = null;
+                                    this.subjectObj.code = null;
                                     this.subjectObj.name = "";
                                     this.subjectObj.remark = "";
                                     this.subjectObj.category = null;
-                                    this.subjectObj.daysKind = "";
+                                    this.subjectObj.daysKind = 0;
                                 }
                             });
                     } else {
@@ -142,7 +158,7 @@
                 if (val === 1) {
                     this.daysKindEnable = true;
                 } else {
-                    this.subjectObj.daysKind = "";
+                    this.subjectObj.daysKind = 0;
                     this.daysKindEnable = false;
                 }
             }

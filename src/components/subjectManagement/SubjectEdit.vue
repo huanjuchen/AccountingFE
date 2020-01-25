@@ -61,14 +61,14 @@
                     code: "",
                     name: "",
                     category: null,
-                    daysKind: "",
+                    daysKind: 0,
                     remark: ""
                 },
                 temp: {
                     code: "",
                     name: "",
                     category: null,
-                    daysKind: "",
+                    daysKind: 0,
                     remark: ""
                 }
                 ,
@@ -123,6 +123,10 @@
                     {
                         label: "银行类",
                         value: 2
+                    },
+                    {
+                        label:"其他",
+                        value:0
                     }
                 ]
             }
@@ -166,7 +170,7 @@
                 if (val === 1) {
                     this.daysKindEnable = true;
                 } else {
-                    this.subject.daysKind = "";
+                    this.subject.daysKind = 0;
                     this.daysKindEnable = false;
                 }
             },
