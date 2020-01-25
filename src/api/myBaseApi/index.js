@@ -28,39 +28,43 @@ axios.interceptors.request.use(config => {
 
 
 
-export default function baseApi(url, data = {}, type = "GET") {
+export default function baseApi(url, data = {}, type = "GET",contentType) {
     url=urlPrefix+url;
+
+    if (!contentType){
+        contentType="application/json;charset=uft-8";
+    }
 
     return new Promise((resolve) => {
         let promise = null;
         //1、执行ajax请求
         if (type === "GET") {
             promise = axios.get(url, null, {
-                headers: { "content-type": "application/json;charset=uft-8" }
+                headers: { "content-type": contentType }
             });
         } else if (type === "PUT") {
             promise = axios.put(url, data,
                 {
-                    headers: { "content-type": "application/json;charset=uft-8" }
+                    headers: { "content-type": contentType }
                 }
             );
         } else if (type === "POST") {
             promise = axios.post(url, data, {
-                headers: { "content-type": "application/json;charset=uft-8" }
+                    headers: { "content-type": contentType }
             }
             );
         } else {
             promise = axios.delete(url, data, {
-                headers: { "content-type": "application/json;charset=uft-8" }
+                headers: { "content-type": contentType }
             });
         }
 
         //2、如果成功则调用resolve
         promise.then(response => {
-            if(response&&response.status==200&&response.data){
-                if(response.data.code==200){
+            if(response&&response.status===200&&response.data){
+                if(response.data.code===200){
                     resolve(response);
-                }else if(response.data.code==401){
+                }else if(response.data.code===401){
                     Message.error("未登录/登录过期");
                     if (sessionStorage.getItem("token_id")) {
                         sessionStorage.removeItem("token_id");

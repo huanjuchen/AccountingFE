@@ -21,6 +21,8 @@
 
         <el-card :style="{marginTop:2+'%'}">
             <subject-list @edit="doEdit" @changePage="doChangePage" @changePageSize="doChangePageSize"
+                          @lockSubject="doLockSubject" @unlockSubject="doUnlockSubject"
+                           @deleteSubject="doDeleteSubject"
                           :subject-count="subjectCount" :subjectList="subjectList"
                           :loading="tableLoading" :page-size="pageSize" v-if="subjectList!=null"/>
         </el-card>
@@ -42,7 +44,11 @@
     import SubjectList from "../components/subjectManagement/SubjectList";
     import SubjectEdit from "../components/subjectManagement/SubjectEdit"
 
-    import {getSubjectListApi, countSubjectApi} from "../api/subjectApi";
+    import {
+        getSubjectListApi, countSubjectApi,
+        lockSubjectApi, unLockSubjectApi,
+        deleteSubjectApi
+    } from "../api/subjectApi";
 
     export default {
         name: "SubjectManagement",
@@ -59,7 +65,7 @@
                 selectType: "all",
                 editId: null,
                 subjectCount: 0,
-                tableLoading:false
+                tableLoading: false
             }
         },
         components: {
@@ -68,6 +74,42 @@
             "subject-edit": SubjectEdit
         },
         methods: {
+            //删除科目
+            doDeleteSubject(val) {
+                deleteSubjectApi(val).then(response => {
+                        if (response && response.data.code === 200) {
+                            this.$message.success("删除成功");
+                            this.getSubjectCount();
+                            this.refreshSubjectList();
+                        }
+                    }
+                );
+            },
+
+            //禁用科目
+            doLockSubject(val) {
+                lockSubjectApi(val).then(response => {
+                        if (response && response.data.code === 200) {
+                            this.$message.success("禁用成功");
+                            this.refreshSubjectList();
+                        }
+                    }
+                );
+            },
+
+            doUnlockSubject(val) {
+
+                unLockSubjectApi(val).then(response => {
+                    if (response && response.data.code === 200) {
+                        this.$message.success("启用成功");
+                        this.refreshSubjectList();
+                    }
+                });
+
+
+            },
+
+
             showCreateDialog() {
                 this.dialogFormVisible = true;
             },
@@ -129,14 +171,14 @@
                 this.refreshSubjectList();
             },
             refreshSubjectList() {
-                this.tableLoading=true;
+                this.tableLoading = true;
                 getSubjectListApi(this.searchText, null,
                     this.desc, this.selectType, this.page, this.pageSize)
                     .then(response => {
                         if (response && response.data.code === 200) {
                             this.subjectList = response.data.data;
                         }
-                        this.tableLoading=false;
+                        this.tableLoading = false;
                     })
             },
             getSubjectCount() {

@@ -1,6 +1,6 @@
 import myBaseApi from "@/api/myBaseApi"
 
-let url = "/admin/user"
+let url = "/admin/user";
 
 export const createUserApi = (user) => {
 
@@ -47,13 +47,13 @@ export const userCountApi = (selectWord,valid) => {
 
 //重置密码
 export const resetPwdApi = (userId) => {
-    return myBaseApi(url + "/resetPwd?userId=" + userId, null, "PUT");
+    return myBaseApi(url + "/resetPwd/"+userId , null, "PUT");
 };
 //禁用用户
 export const lockUserApi = (userId) => {
-    return myBaseApi(url + "/lock?userId=" + userId, null, "PUT");
+    return myBaseApi(url + "/lock/"+userId , null, "PUT");
 };
 //启用用户
 export const unlockUserApi = (userId) => {
-    return myBaseApi(url + "/unlock?userId=" + userId, null, "PUT");
+    return myBaseApi(url + "/unlock/" + userId, null, "PUT");
 };
