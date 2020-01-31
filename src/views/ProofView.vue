@@ -4,16 +4,15 @@
           <el-button type="primary" :style="{float:'right'}" @click="createVisible=true">创建</el-button>
           </h2>
       </el-card>
-    <el-dialog title="创建凭证" width="90%" :visible.sync="createVisible" center>
+    <el-dialog title="创建凭证" width="90%" :visible.sync="createVisible" fullscreen center>
     <proof-create/>
     </el-dialog>
   </div>
 </template>
 
 <script>
-import ProofCreate from "../components/ProofCreate";
+import ProofCreate from "../components/proofView/ProofCreate";
 import { listByUserIdApi } from "../api/proofApi";
-
 export default {
   name: "ProofView",
 
@@ -39,7 +38,7 @@ export default {
       listByUserIdApi(this.user.id, this.page)
         .then(response => {
         //   console.log(response);
-            if(response&&response.status==200){
+            if(response&&response.status===200){
                 this.proofList=response.data.data;
             }
 
