@@ -76,6 +76,7 @@
                                             filterable
                                             placeholder="请输入科目代码或科目名检索"
                                             :loading="loading"
+                                            :remote-method="doGetSubjectList"
                                             v-model="proof.items[scope.$index].creditLedgerSubjectId"
                                     >
                                         <el-option
@@ -95,6 +96,7 @@
                                             filterable
                                             placeholder="请输入科目代码或科目名检索"
                                             :loading="loading"
+                                            :remote-method="doGetSubjectList"
                                             v-model="proof.items[scope.$index].creditSubSubjectId"
                                     >
                                         <div v-if="subjectList!=null">
@@ -176,15 +178,8 @@
                     collection: null, //记账人
                     cashier: null, //出纳人
                     payer: null, //交款人
-                    items: []
-                },
-                proofItemStrut: {
-                    abstraction: "", //摘要
-                    debitSubSubjectId: null, //借方明细账科目ID
-                    creditSubSubjectId: null, //贷方明细账科目ID
-                    debitLedgerSubjectId: null, //借方总账科目ID
-                    creditLedgerSubjectId: null, //贷方总账科目ID
-                    money: 0 //金额
+                    items: [
+                    ]
                 }
             };
         },
@@ -192,11 +187,22 @@
         methods: {
             test(val){
                 console.log(val)
+            },
+            getStrut(){
+                let obj={};
+                obj.abstraction=null;//摘要
+                obj.debitSubSubjectId=null;//借方明细账科目ID
+                obj.creditSubSubjectId=null;//贷方明细账科目ID
+                obj.debitLedgerSubjectId=null;//借方总账科目ID
+                obj.creditLedgerSubjectId=null;//贷方总账科目ID
+                obj.money=null;//金额
+                return obj;
             }
             ,
+
             init() {
                 for (let i = 0; i < 3; i++) {
-                    this.proof.items.push(this.proofItemStrut);
+                    this.proof.items.push(this.getStrut());
                 }
             },
 
@@ -215,7 +221,7 @@
 
             //添加一行
             addItemRow() {
-                this.proof.items.push(this.proofItemStrut);
+                this.proof.items.push(this.getStrut());
             },
             //移除一行
             removeItemRow() {
@@ -225,8 +231,8 @@
             //提交凭证
             submitProof() {
                 createProofApi(this.proof).then(response => {
-                    if (response && response === 200) {
-                        this.$emit("createSuccess");
+                    if (response && response.data.code === 200) {
+                        this.$message.success("创建成功");
                         this.proof.date = null;
                         this.proof.invoiceCount = null;
                         this.proof.manager = null;
@@ -237,6 +243,8 @@
                         this.addItemRow();
                         this.addItemRow();
                         this.addItemRow();
+                        this.$emit("createSuccess");
+
                     }
                 });
             }
