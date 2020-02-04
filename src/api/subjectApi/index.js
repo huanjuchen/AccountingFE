@@ -17,27 +17,21 @@ export const getSubjectListApi = (searchWord, valid, desc, selectType, page, pag
     if (searchWord != null && searchWord.length > 0) {
         queryParam = queryParam + "&searchWord=" + searchWord;
     }
-
     if (valid != null) {
         queryParam = queryParam + "&valid=" + valid;
     }
-
     if (desc != null && desc.length > 0) {
         queryParam = queryParam + "&desc=" + desc;
     }
-
     if (selectType != null && selectType.length > 0) {
         queryParam = queryParam + "&selectType=" + selectType;
     }
-
     if (page) {
         queryParam = queryParam + "&page=" + page;
     }
-
     if (pageSize) {
         queryParam = queryParam + "&pageSize=" + pageSize;
     }
-
     if (queryParam.length > 0) {
         queryParam = queryParam.substr(1);
     }
