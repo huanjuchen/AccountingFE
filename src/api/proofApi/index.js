@@ -6,21 +6,15 @@ export const createProofApi = (obj) => {
     return myBaseApi("/proof", JSON.stringify(obj), "POST");
 };
 
-
-export const listByUserIdApi = (userId, page) => {
-    return myBaseApi(baseUrl + "?recorderId=" + userId + "&page=" + page, null, "GET")
-};
-
-
 export const getProof = (rid, startDate, endDate, verify, orderType, page, pageSize) => {
     let queryParam = "";
     if (rid != null) {
         queryParam = queryParam + "&rid=" + rid;
     }
-    if (startDate != null) {
+    if (startDate != null && startDate.length > 0) {
         queryParam = queryParam + "&startDate=" + startDate;
     }
-    if (endDate != null) {
+    if (endDate != null && endDate.length > 0) {
         queryParam = queryParam + "&endDate=" + endDate;
     }
     if (verify != null) {
@@ -38,8 +32,28 @@ export const getProof = (rid, startDate, endDate, verify, orderType, page, pageS
     if (queryParam.length > 0) {
         queryParam = queryParam.substr(1);
     }
-    return myBaseApi(baseUrl+"?"+queryParam, null, "GET");
+    return myBaseApi(baseUrl + "?" + queryParam, null, "GET");
+};
 
+
+export const getProofCountApi = (rid, startDate, endDate, verify) => {
+    let queryParam = "";
+    if (rid != null) {
+        queryParam = queryParam + "&rid=" + rid;
+    }
+    if (startDate != null && startDate.length > 0) {
+        queryParam = queryParam + "&startDate=" + startDate;
+    }
+    if (endDate != null && endDate.length > 0) {
+        queryParam = queryParam + "&endDate=" + endDate;
+    }
+    if (verify != null) {
+        queryParam = queryParam + "&verify=" + verify;
+    }
+    if (queryParam.length > 0) {
+        queryParam = queryParam.substr(1);
+    }
+    return myBaseApi(baseUrl + "/count?" + queryParam, null, "GET");
 };
 
 export const getProofByIdApi = (id) => {

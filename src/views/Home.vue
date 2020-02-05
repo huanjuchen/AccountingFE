@@ -1,6 +1,6 @@
 <template>
   <el-container v-bind:style="{height:100+'%'}">
-    <el-aside v-bind:style="{height:100+'%',width:245+'px'}">
+    <el-aside v-bind:style="{height:100+'%',width:220+'px'}" >
       <!-- 左栏 -->
       <left-bar />
     </el-aside>

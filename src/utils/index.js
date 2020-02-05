@@ -1,8 +1,20 @@
 export const dateFormatter = (value) => {
     let date = new Date(value);
-    return (
-        date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate()
-    );
+    let year = date.getFullYear();
+    let month = null;
+    if (date.getMonth() < 9) {
+        month = "0" + (date.getMonth() + 1);
+    } else {
+        month = "" + (date.getMonth() + 1);
+    }
+    let day = null;
+
+    if (date.getDate() < 10) {
+        day = "0" + date.getDate();
+    } else {
+        day = "" + date.getDate();
+    }
+    return year + "-" + month + "-" + day;
 
 };
 
