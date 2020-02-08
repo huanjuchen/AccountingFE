@@ -18,6 +18,13 @@
             <el-table-column label="操作" width="300">
                 <template slot-scope="scope">
                     <el-button size="small" plain @click="viewDetails(scope.row.id)">查看</el-button>
+
+                    <el-button v-if="user.role<=2&&scope.row.verify===0" size="small" type="primary" @click="verifyProof(scope.row.id,true)">
+                        审核通过
+                    </el-button>
+                    <el-button v-if="user.role<=2&&scope.row.verify===0" size="small" type="primary" @click="verifyProof(scope.row.id,false)">
+                        审核不通过
+                    </el-button>
                 </template>
             </el-table-column>
         </el-table>
@@ -38,7 +45,8 @@
             loading: Boolean,
             proofTotal: Number,
             page: Number,
-            pageSize: Number
+            pageSize: Number,
+            user:Object
         },
         data() {
             return {}
@@ -52,6 +60,27 @@
             },
             pageChange(val) {
                 this.$emit("pageChange", val);
+            },
+            verifyProof(id, result) {
+                let msg;
+
+                if (result){
+                     msg="此操作将通过该凭证且操作不可逆，是否继续？"
+                } else {
+                    msg="此操作将不通过该凭证且操作不可逆，是否继续？"
+                }
+                this.$confirm(msg, '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    this.$emit("verifyProof", id, result);
+                }).catch(() => {
+                    this.$message({
+                        type: 'info',
+                        message: '操作已取消'
+                    });
+                });
             }
         }
     }

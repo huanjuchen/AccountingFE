@@ -2,6 +2,7 @@ import myBaseApi from "../myBaseApi"
 
 const baseUrl = "/proof";
 
+
 export const createProofApi = (obj) => {
     return myBaseApi("/proof", JSON.stringify(obj), "POST");
 };
@@ -35,7 +36,6 @@ export const getProof = (rid, startDate, endDate, verify, orderType, page, pageS
     return myBaseApi(baseUrl + "?" + queryParam, null, "GET");
 };
 
-
 export const getProofCountApi = (rid, startDate, endDate, verify) => {
     let queryParam = "";
     if (rid != null) {
@@ -58,4 +58,8 @@ export const getProofCountApi = (rid, startDate, endDate, verify) => {
 
 export const getProofByIdApi = (id) => {
     return myBaseApi(baseUrl + "/" + id, null, "GET");
+};
+
+export const verifyProofApi = (obj) => {
+    return myBaseApi("/manage/proof/verify", JSON.stringify(obj), "PUT")
 };
