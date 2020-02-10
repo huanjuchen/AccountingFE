@@ -10,6 +10,7 @@ import ProofView from "../views/ProofView"
 import CashAccountView from "../views/CashAccountView"
 import BankAccountView from "../views/BankAccountView"
 import SubAccountView from "../views/SubAccountView"
+import LedgerAccountView from "../views/LedgerAccountView"
 
 Vue.use(VueRouter);
 
@@ -42,6 +43,10 @@ const routes = [
             {
                 path: "/subAccount",
                 component: SubAccountView
+            },
+            {
+                path: "/ledgerAccount",
+                component: LedgerAccountView
             }
 
 

@@ -22,7 +22,7 @@
         <el-card :style="{marginTop:15+'px'}">
             <proof-list :page="page" :page-size="pageSize" :loading="loading" :proof-total="proofTotal" :user="user"
                         :proof-list="proofList" @viewDetail="doViewDetail" @verifyProof="doVerifyProof"
-                        @pageChange="doPageChange" @pageSizeChange="doPageSizeChange"/>
+                        @pageChange="doPageChange" @pageSizeChange="doPageSizeChange" @trashProof="doTrash"/>
         </el-card>
 
         <el-dialog title="创建凭证" :visible.sync="createVisible" fullscreen center>
@@ -38,7 +38,7 @@
     import ProofCreate from "../components/proofView/ProofCreate";
     import ProofList from "../components/proofView/ProofList";
     import ProofDetail from "../components/proofView/ProofDetail";
-    import {getProof, getProofCountApi, getProofByIdApi, verifyProofApi} from "../api/proofApi";
+    import {getProof, getProofCountApi, getProofByIdApi, verifyProofApi, trashProofApi} from "../api/proofApi";
 
     export default {
         name: "ProofView",
@@ -93,6 +93,19 @@
             };
         },
         methods: {
+            doTrash(val) {
+                console.log(val);
+                this.$message.info("正在处理，请稍后...");
+
+                trashProofApi(val).then(response => {
+                    if (response && response.data.code === 200) {
+                        this.$message.success("冲账成功");
+                        this.getProofList();
+                        this.getProofCount();
+                    }
+                });
+            },
+
             doVerifyProof(proofId, result) {
                 this.$message.info("正在处理，请稍后...");
                 let obj = {

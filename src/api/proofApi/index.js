@@ -63,3 +63,7 @@ export const getProofByIdApi = (id) => {
 export const verifyProofApi = (obj) => {
     return myBaseApi("/manage/proof/verify", JSON.stringify(obj), "PUT")
 };
+
+export const trashProofApi=(id)=>{
+    return myBaseApi("/manage/proof/trash/"+id,null,"PUT");
+};
