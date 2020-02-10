@@ -17,7 +17,7 @@
                 <el-menu-item @click="pushToAddr('/cashAccount')" index="cashAccount">现金日记账</el-menu-item>
                 <el-menu-item @click="pushToAddr('/bankAccount')" index="bankAccount">银行日记账</el-menu-item>
                 <el-menu-item @click="pushToAddr('/subAccount')" index="subAccount">明细分类账</el-menu-item>
-                <el-menu-item @click="pushToAddr('/subAccount')" index="ledgerAccount">总分类账</el-menu-item>
+                <el-menu-item @click="pushToAddr('/ledgerAccount')" index="ledgerAccount">总分类账</el-menu-item>
             </el-submenu>
             <el-menu-item
                     v-if="user!=null&&(user.role===1||user.role===2)"
