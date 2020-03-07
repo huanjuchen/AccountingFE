@@ -8,7 +8,7 @@
                 menu-trigger="click"
         >
             <el-menu-item></el-menu-item>
-            <el-menu-item index="dashborad">Dashborad</el-menu-item>
+            <el-menu-item index="default" @click="pushToAddr('/default')">首页</el-menu-item>
             <el-menu-item index="proofView" @click="pushToAddr('/proofView')">凭证管理</el-menu-item>
             <el-submenu index="2">
                 <template slot="title">
@@ -31,7 +31,9 @@
                     @click="pushToAddr('/userManagement')"
             >用户管理
             </el-menu-item>
-            <el-menu-item index="userCenter">个人中心</el-menu-item>
+            <el-menu-item index="information"  @click="pushToAddr('/informationCenter')">公告中心</el-menu-item>
+
+            <el-menu-item index="userCenter" @click="pushToAddr('/userCenter')">个人中心</el-menu-item>
         </el-menu>
     </div>
 </template>

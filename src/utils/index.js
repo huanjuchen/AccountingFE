@@ -15,6 +15,27 @@ export const dateFormatter = (value) => {
         day = "" + date.getDate();
     }
     return year + "-" + month + "-" + day;
+};
+
+export const timeFormatter = (value) => {
+    let date = new Date(value);
+    let dateStr = dateFormatter(value);
+    let hour = date.getHours();
+    if (hour < 10) {
+        hour = "0" + hour;
+    }
+
+
+    let mim = date.getMinutes();
+    if (mim < 10) {
+        mim = "0" + mim;
+    }
+    let sec = date.getSeconds();
+    if (sec < 10) {
+        sec = "0" + sec;
+    }
+
+    return dateStr + " " + hour + ":" + mim + ":" + sec;
 
 };
 

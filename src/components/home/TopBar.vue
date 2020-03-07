@@ -7,11 +7,14 @@
           <i class="el-icon-user"></i>
         </span>
         <el-dropdown-menu slot="dropdown">
-          <el-dropdown-item command="userCenter">个人中心</el-dropdown-item>
           <el-dropdown-item command="userLogout">退出登录</el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
     </el-menu-item>
+
+      <form enctype="application/x-www-form-urlencoded">
+
+      </form>
 
     <el-menu-item v-bind:style="{float:'right'}" v-if="user==null">
       <span class="el-dropdown-link">
@@ -42,12 +45,8 @@ export default {
     },
 
     handleCommand(command) {
-      if (command == "userLogout") {
+      if (command === "userLogout") {
         this.logout();
-      }
-
-      if (command == "userCenter") {
-        console.log("跳转到个人中心");
       }
     },
 

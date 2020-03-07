@@ -114,7 +114,6 @@
                         value: 6
                     }
                 ],
-
                 daysKinds: [
                     {
                         label: "现金类",
@@ -142,7 +141,6 @@
                         });
                 }
             },
-
             submitForm(formName) {
                 this.$refs[formName].validate(valid => {
                     if (valid) {

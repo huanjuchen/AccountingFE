@@ -39,7 +39,7 @@ export default function baseApi(url, data = {}, type = "GET",contentType) {
         let promise = null;
         //1、执行ajax请求
         if (type === "GET") {
-            promise = axios.get(url, null, {
+            promise = axios.get(url, {
                 headers: { "content-type": contentType }
             });
         } else if (type === "PUT") {
@@ -54,7 +54,7 @@ export default function baseApi(url, data = {}, type = "GET",contentType) {
             }
             );
         } else {
-            promise = axios.delete(url, data, {
+            promise = axios.delete(url,  {
                 headers: { "content-type": contentType }
             });
         }
