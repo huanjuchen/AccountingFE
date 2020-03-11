@@ -31,7 +31,7 @@
                     @click="pushToAddr('/userManagement')"
             >用户管理
             </el-menu-item>
-            <el-menu-item index="information"  @click="pushToAddr('/informationCenter')">公告中心</el-menu-item>
+            <el-menu-item v-if="user!=null&&(user.role===1||user.role===2)" index="information"  @click="pushToAddr('/informationCenter')">公告中心</el-menu-item>
 
             <el-menu-item index="userCenter" @click="pushToAddr('/userCenter')">个人中心</el-menu-item>
         </el-menu>

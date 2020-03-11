@@ -32,7 +32,7 @@ export default function baseApi(url, data = {}, type = "GET",contentType) {
     url=urlPrefix+url;
 
     if (!contentType){
-        contentType="application/json;charset=uft-8";
+        contentType="application/json;charset=utf-8";
     }
 
     return new Promise((resolve) => {

@@ -65,5 +65,5 @@ export const verifyProofApi = (obj) => {
 };
 
 export const trashProofApi=(id)=>{
-    return myBaseApi("/manage/proof/trash/"+id,null,"PUT");
+    return myBaseApi("/proof/trash/"+id,null,"PUT");
 };
