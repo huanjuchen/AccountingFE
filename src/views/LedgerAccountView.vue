@@ -25,15 +25,13 @@
             <b>会计科目：</b>{{subject.name}}
         </div>
         <hr/>
-        <ledger-account-list :loading="loading"
-                          :page="page" :page-size="pageSize" :account-list="accountList"
-                          :total="accountCount" @pageChange="doPageChange" @pageSizeChange="doPageSizeChange"/>
+        <ledger-account-list :account-list="accountList" :loading="loading" />
     </el-card>
     </div>
 </template>
 
 <script>
-    import {getLedgerAccountApi,getLedgerAccountCountApi} from "../api/accountBookApi"
+    import {getLedgerAccountApi} from "../api/accountBookApi"
     import {
         getSubjectListApi,getSubjectById
     } from "../api/subjectApi";
@@ -45,16 +43,12 @@
                 //queryParam
                 startDate: "",
                 endDate: "",
-                page: 1,
-                pageSize: 5,
                 subjectId: null,
                 subject:null,
                 //subjectList
                 subjectList: [],
                 //list
                 accountList: [],
-                accountCount: 0,
-
                 //
                 rangeDate: null,
                 loading: false,
@@ -62,17 +56,7 @@
             }
         },
         methods: {
-
-            doPageChange(val) {
-                this.page = val;
-                this.getAccount();
-            },
-            doPageSizeChange(val) {
-                this.pageSize = val;
-                this.getAccount();
-            },
             doSelect() {
-                this.getCount();
                 this.getAccount();
                 this.getSubject();
             },
@@ -92,20 +76,6 @@
                             this.loading=false;
                         }
                     });
-            },
-            getCount() {
-                if (this.startDate.length <= 0 || this.endDate <= 0) {
-                    this.$message.warning("请选择日期");
-                    return;
-                }
-                if (this.subjectId == null) {
-                    this.$message.error("请选择科目");return;
-                }
-                getLedgerAccountCountApi(this.subjectId, this.startDate, this.endDate).then(response => {
-                    if (response && response.data.code === 200) {
-                        this.accountCount = response.data.data;
-                    }
-                });
             },
             doGetSubjectList(query) {
                 if (query !== '') {

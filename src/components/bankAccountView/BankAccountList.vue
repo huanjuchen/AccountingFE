@@ -12,11 +12,8 @@
             <el-table-column label="借方" prop="debitMoney"></el-table-column>
             <el-table-column label="贷方" prop="creditMoney"></el-table-column>
         </el-table>
-        <div style="text-align: center">
-            <el-pagination v-loading="loading" @size-change="pageSizeChange" @current-change="pageChange" background :total="total"
-                           :page-sizes="[5,7,10,15]"
-                           :page-size="pageSize"
-                           layout="prev, pager, next,sizes,total"></el-pagination>
+        <div style="float: right;line-height: 50px">
+            <b>借方总计：</b>{{debitTotal()}}<b>&nbsp;&nbsp;&nbsp;贷方总计：</b>{{creditTotal()}}
         </div>
     </div>
 </template>
@@ -26,17 +23,40 @@
         name: "BankAccountList",
         props:{
             accountList:Array,
-            total:Number,
-            loading: Boolean,
-            page:Number,
-            pageSize:Number
+            loading: Boolean
         },
         methods:{
-            pageSizeChange(val) {
-                this.$emit("pageSizeChange", val);
+            debitTotal() {
+                if (this.accountList != null && this.accountList.length > 0) {
+                    let res = 0;
+                    let dm = 0;
+                    for (let i = 0; i < this.accountList.length; i++) {
+                        dm = this.accountList[i].debitMoney;
+                        if (dm == null) {
+                            dm = 0;
+                        }
+                        res = this.$utils.decimalAdd(res, dm)
+                    }
+                    return res;
+                } else {
+                    return 0;
+                }
             },
-            pageChange(val) {
-                this.$emit("pageChange", val);
+            creditTotal() {
+                if (this.accountList != null && this.accountList.length > 0) {
+                    let res = 0;
+                    let cm=0;
+                    for (let i = 0; i < this.accountList.length; i++) {
+                        cm=this.accountList[i].creditMoney;
+                        if (cm==null){
+                            cm=0;
+                        }
+                        res = this.$utils.decimalAdd(res, cm)
+                    }
+                    return res;
+                } else {
+                    return 0;
+                }
             }
         }
     }

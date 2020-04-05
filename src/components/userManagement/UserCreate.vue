@@ -2,7 +2,7 @@
 
     <el-form :model="userForm" ref="userForm" :rules="userFormRules">
       <el-form-item prop="username">
-        <el-input placeholder="登录名" v-model="userForm.username"></el-input>
+        <el-input placeholder="用户名" v-model="userForm.username"></el-input>
       </el-form-item>
       <el-form-item prop="name">
         <el-input placeholder="姓名" v-model="userForm.name"></el-input>

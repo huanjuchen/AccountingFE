@@ -10,7 +10,8 @@ Vue.use(ElementUI);
 
 Vue.prototype.$utils=utils;
 
-Vue.config.productionTip = false
+Vue.config.productionTip = false;
+
 
 new Vue({
   router,

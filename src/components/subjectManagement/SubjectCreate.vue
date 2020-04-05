@@ -40,7 +40,7 @@
             <el-form-item>
                 <div :style="{textAlign:'center'}">
                     <el-button @click="doCancel">取 消</el-button>
-                    <el-button type="primary" @click="submitForm('subjectObj')">创 建</el-button>
+                    <el-button type="primary" @click="submitForm('subjectObj')">添 加</el-button>
                 </div>
             </el-form-item>
         </el-form>

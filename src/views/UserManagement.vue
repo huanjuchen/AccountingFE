@@ -23,7 +23,7 @@
             <user-create @cancelCreate="cancelCreate" @success="createSuccess"/>
         </el-dialog>
 
-        <el-dialog title="创建成功" :visible.sync="userInfoShowDialog" width="480px" center>
+        <el-dialog title="添加成功" :visible.sync="userInfoShowDialog" width="480px" center>
             <user-detail :userInfo="userInfo"/>
         </el-dialog>
 

@@ -27,7 +27,7 @@
                           :loading="tableLoading" :page-size="pageSize" v-if="subjectList!=null"/>
         </el-card>
 
-        <el-dialog title="创建科目" :visible.sync="dialogFormVisible" width="480px" center>
+        <el-dialog title="添加科目" :visible.sync="dialogFormVisible" width="480px" center>
             <subject-create @createSuccess="doCreateSuccess" @createCancel="doCancel"/>
         </el-dialog>
 
@@ -163,7 +163,7 @@
 
             doCreateSuccess(subject) {
                 this.$message.success(
-                    "科目 " + subject.name + " 创建成功"
+                    "科目 " + subject.name + " 添加成功"
                 );
                 this.subject = subject;
                 this.dialogFormVisible = false;
