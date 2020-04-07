@@ -25,9 +25,6 @@ axios.interceptors.request.use(config => {
     return config;
 });
 
-
-
-
 export default function baseApi(url, data = {}, type = "GET",contentType) {
     url=urlPrefix+url;
 
