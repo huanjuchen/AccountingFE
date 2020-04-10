@@ -209,13 +209,15 @@
             doGetSubjectList(query) {
                 if (query !== '') {
                     this.loading = true;
-                    getSubjectListApi(query, true, null, "code", 1, 15)
+                    getSubjectListApi(query, true, null,null, 1, 15)
                         .then(response => {
                             if (response && response.data.code === 200) {
                                 this.subjectList = response.data.data;
                             }
                             this.loading = false
                         });
+                }else {
+                    this.subjectList=[];
                 }
             },
 

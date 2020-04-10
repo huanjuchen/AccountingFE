@@ -18,7 +18,7 @@ export const getProof = (rid, startDate, endDate, verify, orderType, page, pageS
     if (endDate != null && endDate.length > 0) {
         queryParam = queryParam + "&endDate=" + endDate;
     }
-    if (verify != null) {
+    if (verify != null && verify !== -2) {
         queryParam = queryParam + "&verify=" + verify;
     }
     if (orderType != null && orderType.length > 0) {
@@ -64,6 +64,6 @@ export const verifyProofApi = (obj) => {
     return myBaseApi("/manage/proof/verify", JSON.stringify(obj), "PUT")
 };
 
-export const trashProofApi=(id)=>{
-    return myBaseApi("/proof/trash/"+id,null,"PUT");
+export const trashProofApi = (id) => {
+    return myBaseApi("/proof/trash/" + id, null, "PUT");
 };

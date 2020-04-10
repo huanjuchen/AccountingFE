@@ -62,7 +62,6 @@
                 page: 1,
                 pageSize: 7,
                 desc: "code",
-                selectType: "all",
                 editId: null,
                 subjectCount: 0,
                 tableLoading: false
@@ -173,7 +172,7 @@
             refreshSubjectList() {
                 this.tableLoading = true;
                 getSubjectListApi(this.searchText, null,
-                    this.desc, this.selectType, this.page, this.pageSize)
+                    this.desc, null, this.page, this.pageSize)
                     .then(response => {
                         if (response && response.data.code === 200) {
                             this.subjectList = response.data.data;
@@ -182,7 +181,7 @@
                     })
             },
             getSubjectCount() {
-                countSubjectApi(this.searchText, null)
+                countSubjectApi(this.searchText, null,null)
                     .then(response => {
                         if (response && response.data.code === 200) {
                             this.subjectCount = response.data.data;

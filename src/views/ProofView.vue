@@ -58,7 +58,7 @@
                 rid: null,
                 startDate: null,
                 endDate: null,
-                verify: 0,
+                verify: -2,
                 orderType: "idDESC",
                 page: 1,
                 pageSize: 7,
@@ -88,6 +88,10 @@
                     {
                         label: "审核未通过",
                         value: -1
+                    },
+                    {
+                        label: "查看所有",
+                        value: -2
                     }
                 ]
             };
@@ -95,11 +99,9 @@
         methods: {
             doTrash(val) {
                 console.log(val);
-                this.$message.info("正在处理，请稍后...");
-
                 trashProofApi(val).then(response => {
                     if (response && response.data.code === 200) {
-                        this.$message.success("冲账成功");
+                        this.$message.success("提交成功, 等待审核！");
                         this.getProofList();
                         this.getProofCount();
                     }
@@ -107,7 +109,6 @@
             },
 
             doVerifyProof(proofId, result) {
-                this.$message.info("正在处理，请稍后...");
                 let obj = {
                     id: proofId,
                     result: result

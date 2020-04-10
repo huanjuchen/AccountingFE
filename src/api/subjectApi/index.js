@@ -12,7 +12,7 @@ export const createSubjectApi = (obj) => {
 };
 
 
-export const getSubjectListApi = (searchWord, valid, desc, selectType, page, pageSize) => {
+const paramHandle=(searchWord, valid, desc, parentId, page, pageSize)=>{
     let queryParam = "";
     if (searchWord != null && searchWord.length > 0) {
         queryParam = queryParam + "&searchWord=" + searchWord;
@@ -23,34 +23,30 @@ export const getSubjectListApi = (searchWord, valid, desc, selectType, page, pag
     if (desc != null && desc.length > 0) {
         queryParam = queryParam + "&desc=" + desc;
     }
-    if (selectType != null && selectType.length > 0) {
-        queryParam = queryParam + "&selectType=" + selectType;
+    if (parentId != null) {
+        queryParam = queryParam + "&parentId=" + parentId;
     }
-    if (page) {
+    if (page!=null) {
         queryParam = queryParam + "&page=" + page;
     }
-    if (pageSize) {
+    if (pageSize!=null) {
         queryParam = queryParam + "&pageSize=" + pageSize;
     }
     if (queryParam.length > 0) {
         queryParam = queryParam.substr(1);
     }
+    return queryParam;
+};
+
+
+export const getSubjectListApi = (searchWord, valid, desc, parentId, page, pageSize) => {
+    let queryParam=paramHandle(searchWord,valid,desc,parentId,page,pageSize);
     return myBaseApi(baseApi2 + "?" + queryParam, null, "GET");
 };
 
 
-export const countSubjectApi = (searchWord, valid) => {
-    let queryParam = "";
-    if (searchWord != null && searchWord.length > 0) {
-        queryParam = queryParam + "&searchWord=" + searchWord;
-    }
-
-    if (valid != null) {
-        queryParam = queryParam + "&valid=" + valid;
-    }
-    if (queryParam.length > 0) {
-        queryParam = queryParam.substr(1);
-    }
+export const countSubjectApi = (searchWord,parentId, valid) => {
+    let queryParam = paramHandle(searchWord,valid,null,parentId,null,null);
     return myBaseApi(baseApi2 + "/count?" + queryParam, null, "GET");
 
 };

@@ -7,6 +7,10 @@
                 <template slot-scope="scope">{{$utils.getSubjectCategory(scope.row.category)}}</template>
             </el-table-column>
 
+            <el-table-column label="一级科目" width="120">
+                <template slot-scope="scope">{{scope.row.parent==null?null:scope.row.parent.name}}</template>
+            </el-table-column>
+
             <el-table-column label="状态" width="120">
                 <template slot-scope="scope">{{$utils.getState(scope.row.valid)}}</template>
             </el-table-column>

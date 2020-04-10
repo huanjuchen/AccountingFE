@@ -2,7 +2,7 @@
     <div v-if="subject!=null">
         <p>
             <b>科目代码：</b>
-            {{subject.id}}
+            {{subject.code}}
         </p>
         <p>
             <b>科目名：</b>
@@ -12,10 +12,11 @@
             <b>科目类别：</b>
             {{ $utils.getSubjectCategory(subject.category)}}
         </p>
-        <p v-if="subject.daysKind!=null">
-            <b>日记账：</b>
-            {{$utils.getDaysKind(subject.daysKind)}}
+        <p>
+            <b>一级科目：</b>
+            {{subject.parent==null?null:subject.parent.name}}
         </p>
+
         <p>
             <b>状态：</b>
             {{$utils.getState(subject.valid)}}

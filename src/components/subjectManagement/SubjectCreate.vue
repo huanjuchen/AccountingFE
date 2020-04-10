@@ -19,11 +19,14 @@
                 </el-select>
             </el-form-item>
 
-            <el-form-item prop="daysKind" label="日记账">
-                <el-select :disabled="!daysKindEnable" size="small" v-model="subjectObj.daysKind">
-                    <el-option v-for="item in daysKinds" :key="item.value" :label="item.label"
-                               :value="item.value"></el-option>
-
+            <el-form-item prop="parentId" label="一级科目">
+                <el-select  size="small" filterable remote :remote-method="doGetParentList" v-model="subjectObj.parentId">
+                    <el-option
+                            v-for="item in parentList"
+                            :key="item.id"
+                            :label="item.name"
+                            :value="item.id">
+                    </el-option>
                 </el-select>
             </el-form-item>
 
@@ -49,7 +52,7 @@
 </template>
 
 <script>
-    import {createSubjectApi} from "../../api/subjectApi";
+    import {createSubjectApi,getSubjectListApi} from "../../api/subjectApi";
 
     export default {
         name: "SubjectCreate",
@@ -59,10 +62,10 @@
                     code: "",
                     name: "",
                     category: null,
-                    daysKind: 0,
-                    remark: ""
+                    parentId:null,
+                    remark: "",
+                    loading:false
                 },
-                daysKindEnable: false,
                 subjectList: null,
                 rules: {
                     code: [{required: true, message: "科目代码不能为空", trigger: "blur"}],
@@ -104,21 +107,7 @@
                         value: 6
                     }
                 ],
-
-                daysKinds: [
-                    {
-                        label: "现金类",
-                        value: 1
-                    },
-                    {
-                        label: "银行类",
-                        value: 2
-                    },
-                    {
-                        label:"其他",
-                        value:0
-                    }
-                ]
+                parentList:[]
             }
         },
 
@@ -137,7 +126,8 @@
                                     this.subjectObj.name = "";
                                     this.subjectObj.remark = "";
                                     this.subjectObj.category = null;
-                                    this.subjectObj.daysKind = 0;
+                                    this.subjectObj.parentId=null;
+                                    this.parentList=[];
                                 }
                             });
                     } else {
@@ -146,22 +136,26 @@
                 });
             },
 
+            doGetParentList(query) {
+                if (query !== '') {
+                    this.loading = true;
+                    getSubjectListApi(query, true, null,0, 1, 15)
+                        .then(response => {
+                            if (response && response.data.code === 200) {
+                                this.parentList = response.data.data;
+                            }
+                            this.loading = false
+                        });
+                }else {
+                    this.parentList=[];
+                }
+            },
+
 
             doCancel() {
                 this.$emit("createCancel");
             },
 
-        },
-
-        watch: {
-            "subjectObj.category": function (val) {
-                if (val === 1) {
-                    this.daysKindEnable = true;
-                } else {
-                    this.subjectObj.daysKind = 0;
-                    this.daysKindEnable = false;
-                }
-            }
         }
     }
 </script>
