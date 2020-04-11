@@ -28,7 +28,7 @@
                         审核不通过
                     </el-button>
 
-                    <el-button v-if="scope.row.verify===1&&scope.row.trash===0&&(scope.row.recorder.id===user.id||user.role<=2)" size="small" type="danger" @click="trashProof(scope.row.id)">冲账</el-button>
+                    <el-button v-if="scope.row.verify===1&&scope.row.trash===0&&scope.row.recorder.id===user.id" size="small" type="danger" @click="trashProof(scope.row.id)">冲账</el-button>
                 </template>
             </el-table-column>
         </el-table>

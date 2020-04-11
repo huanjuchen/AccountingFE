@@ -1,9 +1,9 @@
 <template>
     <div>
         <el-card>
-            日期
-            <el-date-picker @change="rangeDateChange" v-model="rangeDate" type="daterange" size="small"
-                            range-separator="-" start-placeholder="开始日期" end-placeholder="结束日期"></el-date-picker>
+            月份
+            <el-date-picker @change="monthChange" v-model="monthValue" type="month" size="small" placeholder="选择月">
+            </el-date-picker>
             &nbsp;&nbsp;&nbsp;
             <el-button size="small" type="primary" @click="doSelect">筛选</el-button>
         </el-card>
@@ -28,11 +28,24 @@
                 //list
                 cashAccountList: [],
                 //
-                rangeDate: null
+                monthValue: null,
             }
         },
 
         methods: {
+
+            monthChange(val) {
+                let date = new Date(val);
+                let month = date.getMonth() + 1;
+                let year = date.getFullYear();
+                let lastDay=this.$utils.getLastDay(year,month);
+                if (month<10){
+                    month="0"+month;
+                }
+                let ym=year+"-"+month;
+                this.startDate=ym+"-"+"01";
+                this.endDate=ym+"-"+lastDay
+            },
             doSelect() {
                 this.getCashAccount();
             },
@@ -47,16 +60,7 @@
                             this.cashAccountList = response.data.data;
                         }
                     });
-            },
-            rangeDateChange() {
-                if (this.rangeDate != null) {
-                    this.startDate = this.$utils.dateFormatter(this.rangeDate[0]);
-                    this.endDate = this.$utils.dateFormatter(this.rangeDate[1]);
-                } else {
-                    this.startDate = "";
-                    this.endDate = "";
-                }
-            },
+            }
         },
 
         components: {

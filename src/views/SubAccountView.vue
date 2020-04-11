@@ -1,9 +1,9 @@
 <template>
     <div>
         <el-card>
-            日期
-            <el-date-picker @change="rangeDateChange" v-model="rangeDate" type="daterange" size="small"
-                            range-separator="-" start-placeholder="开始日期" end-placeholder="结束日期"></el-date-picker>
+            月份
+            <el-date-picker @change="monthChange" v-model="monthValue" type="month" size="small" placeholder="选择月">
+            </el-date-picker>
             科目
             <el-select size="small" :remote-method="doGetSubjectList"
                        v-model="subjectId" :loading="subLoading"
@@ -51,12 +51,25 @@
                 //list
                 accountList: [],
                 //
-                rangeDate: null,
                 loading: false,
-                subLoading: false
+                subLoading: false,
+                monthValue: null
             }
         },
         methods: {
+
+            monthChange(val) {
+                let date = new Date(val);
+                let month = date.getMonth() + 1;
+                let year = date.getFullYear();
+                let lastDay=this.$utils.getLastDay(year,month);
+                if (month<10){
+                    month="0"+month;
+                }
+                let ym=year+"-"+month;
+                this.startDate=ym+"-"+"01";
+                this.endDate=ym+"-"+lastDay
+            },
             doSelect() {
                 this.getAccount();
                 this.getSubject();
@@ -71,7 +84,7 @@
                     this.$message.error("请选择科目");return;
                 }
                 this.loading=true;
-                getSubAccountApi(this.subjectId, this.startDate, this.endDate, this.page, this.pageSize)
+                getSubAccountApi(this.subjectId, this.startDate, this.endDate)
                     .then(response => {
                         if (response && response.data.code === 200) {
                             this.accountList = response.data.data;
@@ -82,7 +95,7 @@
             doGetSubjectList(query) {
                 if (query !== '') {
                     this.subLoading = true;
-                    getSubjectListApi(query, true, null, "code", 1, 15)
+                    getSubjectListApi(query, null, null, null, 1, 15)
                         .then(response => {
                             if (response && response.data.code === 200) {
                                 this.subjectList = response.data.data;
@@ -99,16 +112,7 @@
                         }
                     })
                 }
-            },
-            rangeDateChange() {
-                if (this.rangeDate != null) {
-                    this.startDate = this.$utils.dateFormatter(this.rangeDate[0]);
-                    this.endDate = this.$utils.dateFormatter(this.rangeDate[1]);
-                } else {
-                    this.startDate = "";
-                    this.endDate = "";
-                }
-            },
+            }
         },
         components:{
             "sub-account-list":SubAccountList

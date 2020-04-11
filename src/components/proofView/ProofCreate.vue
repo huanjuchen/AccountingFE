@@ -170,7 +170,7 @@
             return {
                 subjectList: [],
                 loading: false,
-
+                submitAble: true,
                 proof: {
                     date: null, //业务发生日期
                     invoiceCount: null, //单据数
@@ -178,30 +178,29 @@
                     collection: null, //记账人
                     cashier: null, //出纳人
                     payer: null, //交款人
-                    items: [
-                    ]
+                    items: []
                 }
             };
         },
         //------------
         methods: {
-            test(val){
+            test(val) {
                 console.log(val)
             },
-            getStrut(){
-                let obj={};
-                obj.abstraction=null;//摘要
-                obj.debitSubSubjectId=null;//借方明细账科目ID
-                obj.creditSubSubjectId=null;//贷方明细账科目ID
-                obj.debitLedgerSubjectId=null;//借方总账科目ID
-                obj.creditLedgerSubjectId=null;//贷方总账科目ID
-                obj.money=null;//金额
+            getStrut() {
+                let obj = {};
+                obj.abstraction = null;//摘要
+                obj.debitSubSubjectId = null;//借方明细账科目ID
+                obj.creditSubSubjectId = null;//贷方明细账科目ID
+                obj.debitLedgerSubjectId = null;//借方总账科目ID
+                obj.creditLedgerSubjectId = null;//贷方总账科目ID
+                obj.money = null;//金额
                 return obj;
             }
             ,
 
             init() {
-                for (let i = 0; i < 3; i++) {
+                for (let i = 0; i < 2; i++) {
                     this.proof.items.push(this.getStrut());
                 }
             },
@@ -209,15 +208,15 @@
             doGetSubjectList(query) {
                 if (query !== '') {
                     this.loading = true;
-                    getSubjectListApi(query, true, null,null, 1, 15)
+                    getSubjectListApi(query, true, null, null, 1, 15)
                         .then(response => {
                             if (response && response.data.code === 200) {
                                 this.subjectList = response.data.data;
                             }
                             this.loading = false
                         });
-                }else {
-                    this.subjectList=[];
+                } else {
+                    this.subjectList = [];
                 }
             },
 
@@ -232,6 +231,11 @@
 
             //提交凭证
             submitProof() {
+                if (!this.submitAble) {
+                    this.$message.error("不可重复提交");
+                    return;
+                }
+                this.submitAble = false;
                 createProofApi(this.proof).then(response => {
                     if (response && response.data.code === 200) {
                         this.$message.success("创建成功");
@@ -244,11 +248,12 @@
                         this.proof.items = [];
                         this.addItemRow();
                         this.addItemRow();
-                        this.addItemRow();
                         this.$emit("createSuccess");
-
+                        this.submitAble = true;
+                    } else {
+                        this.submitAble = true;
                     }
-                });
+                })
             }
         },
         //-------------

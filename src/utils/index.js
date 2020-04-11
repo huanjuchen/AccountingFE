@@ -73,15 +73,6 @@ export const getSubjectCategory = (val) => {
     }
 };
 
-export const getDaysKind = (val) => {
-    if (val === 1) {
-        return "现金类";
-    } else if (val === 2) {
-        return "银行类";
-    }
-};
-
-
 export const getVerifyStatus = (val) => {
     if (val === 0) {
         return "待审核";
@@ -107,4 +98,23 @@ export const decimalAdd = (arg1, arg2) => {
     m = Math.pow(10, Math.max(r1, r2));
     n = (r1 >= r2) ? r1 : r2;
     return ((arg1 * m + arg2 * m) / m).toFixed(n);
+};
+
+
+export const getLastDay=(year,month)=>{
+    if (month === 1 || month === 3 || month === 5 || month === 7 || month === 8 || month === 10 || month === 12) {
+        return 31;
+    }
+    if (month === 4 || month === 6 || month === 9 || month === 11) {
+        return 30;
+    }
+    return isLeapYear(year) ? 29 : 28;
+};
+
+
+//查看该年份是否为闰年
+export const isLeapYear=(year)=>{
+    if (year % 400 === 0) {
+        return true;
+    } else return year % 4 === 0 && year % 100 !== 0;
 };

@@ -1,23 +1,29 @@
 <template>
     <div>
         <el-card>
-            日期范围
-            <el-date-picker @change="rangeDateChange" v-model="rangeDate" type="daterange" size="small"
-                            range-separator="-" start-placeholder="开始日期" end-placeholder="结束日期"></el-date-picker>
+            月份
+            <el-date-picker @change="monthChange" v-model="monthValue" type="month" size="small" placeholder="选择月">
+            </el-date-picker>
             模式
             <el-select @change="selectValueChange1" size="small" v-model="selectedValue1">
                 <el-option v-for="item in options1" :label="item.label" :key="item.value"
                            :value="item.value"></el-option>
             </el-select>
-
-            稽查状态
+            审核状态
             <el-select @change="selectValueChange2" size="small" v-model="selectedValue2">
                 <el-option v-for="item in options2" :label="item.label" :key="item.value"
                            :value="item.value"></el-option>
-            </el-select>&nbsp;&nbsp;&nbsp;
+            </el-select>
+            排序方式
+            <el-select @change="doSortChange" size="small" v-model="orderType">
+                <el-option v-for="item in sortOptions" :label="item.label" :key="item.value"
+                           :value="item.value"></el-option>
+            </el-select>
+            <p style="text-align: center">
             <el-button size="small" type="primary" @click="doSelect">筛选</el-button>
-            <el-button size="small" type="primary">重置</el-button>
+            <el-button size="small" type="primary" @click="queryParamReset">重置</el-button>
             <el-button size="small" type="primary" @click="createVisible=true">创建</el-button>
+            </p>
         </el-card>
         <el-card :style="{marginTop:15+'px'}">
             <proof-list :page="page" :page-size="pageSize" :loading="loading" :proof-total="proofTotal" :user="user"
@@ -54,29 +60,34 @@
                 loading: false,
 
                 //queryParam
-                rangeDate: null,
                 rid: null,
                 startDate: null,
                 endDate: null,
                 verify: -2,
-                orderType: "idDESC",
+                orderType: "dateDESC",
                 page: 1,
                 pageSize: 7,
 
                 //
-                selectedValue1: 0,
-                selectedValue2: 0,
+                selectedValue1: 1,
+                selectedValue2: -2,
+
+                monthValue: null,
                 options1: [
-                    {
-                        label: "只看我",
-                        value: 0
-                    },
                     {
                         label: "显示所有",
                         value: 1
+                    },
+                    {
+                        label: "只看我",
+                        value: 0
                     }
                 ],
                 options2: [
+                    {
+                        label: "查看所有",
+                        value: -2
+                    },
                     {
                         label: "待审核",
                         value: 0
@@ -88,15 +99,49 @@
                     {
                         label: "审核未通过",
                         value: -1
+                    }
+
+                ],
+                sortOptions:[
+                    {
+                        label: "日期降序",
+                        value: "dateDESC"
                     },
                     {
-                        label: "查看所有",
-                        value: -2
+                        label:"日期升序",
+                        value:"dateASC"
+                    },
+                    {
+                        label:"凭证号降序",
+                        value:"idDESC"
+                    },
+                    {
+                        label:"凭证号升序",
+                        value:"idASC"
                     }
-                ]
+                ],
             };
         },
         methods: {
+
+            doSortChange(){
+                this.getProofList();
+            },
+
+            monthChange(val) {
+                let date = new Date(val);
+                let month = date.getMonth() + 1;
+                let year = date.getFullYear();
+                let lastDay=this.$utils.getLastDay(year,month);
+                if (month<10){
+                    month="0"+month;
+                }
+                let ym=year+"-"+month;
+                this.startDate=ym+"-"+"01";
+                this.endDate=ym+"-"+lastDay;
+                this.getProofList();
+                this.getProofCount();
+            },
             doTrash(val) {
                 console.log(val);
                 trashProofApi(val).then(response => {
@@ -121,8 +166,6 @@
                         this.getProofCount();
                         this.getProofList();
                     });
-
-
             },
             doPageChange(val) {
                 this.page = val;
@@ -139,11 +182,15 @@
                 } else if (val === 1) {
                     this.rid = null;
                 }
+                this.getProofList();
+                this.getProofCount();
             },
             //稽查状态选择框值的改变
             selectValueChange2(val) {
                 // console.log(val);
                 this.verify = val;
+                this.getProofList();
+                this.getProofCount();
             },
 
             doSelect() {
@@ -152,32 +199,28 @@
             },
             doCreateSuccess() {
                 this.createVisible = false;
+                this.getProofCount();
+                this.getProofList();
             },
             init() {
                 let temp = sessionStorage.getItem("user");
                 if (temp != null) {
                     this.user = JSON.parse(temp);
-                    this.rid = this.user.id;
                 }
+
+                this.monthValue=new Date();
+                this.monthChange(this.monthValue);
                 this.getProofCount();
                 this.getProofList();
 
-            },
-            rangeDateChange() {
-                if (this.rangeDate != null) {
-                    // this.startDate = this.rangeDate[0];
-                    this.startDate = this.$utils.dateFormatter(this.rangeDate[0]);
-                    this.endDate = this.$utils.dateFormatter(this.rangeDate[1]);
-                } else {
-                    this.startDate = null;
-                    this.endDate = null;
-                }
             },
             queryParamReset() {
                 this.rid = null;
                 this.startDate = null;
                 this.endDate = null;
-                this.orderType = null;
+                // this.orderType = null;
+                this.getProofCount();
+                this.getProofList();
             },
             getProofList() {
                 this.loading = true;

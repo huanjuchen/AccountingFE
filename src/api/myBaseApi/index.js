@@ -82,12 +82,12 @@ export default function baseApi(url, data = {}, type = "GET",contentType) {
                         message: response.data.msg+ "\t错误代码：" + response.data.code,
                         type: "error"
                     });
+                    resolve(response);
                 }   
             }    
         }).catch(error => {
-            console.log(error);
             Message({
-                message: "请求出现了一个错误，请稍后重试",
+                message: "请求出现了一个错误，请稍后重试\t错误代码："+error.response.status,
                 type: "error"
             });
         });
