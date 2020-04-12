@@ -9,8 +9,12 @@
             <el-button size="small" type="primary" @click="doSelect">筛选</el-button>
         </el-card>
 
-        <el-card :style="{marginTop:15+'px'}">
+        <el-card v-if="accountList!=null&&accountList.length>0" :style="{marginTop:5+'px'}">
+            <h2 style="text-align: center">银行存款日记账</h2>
+            <p></p>
             <bank-account-list :loading="loading" :account-list="accountList"/>
+            <p></p>
+            <p></p>
         </el-card>
     </div>
 </template>
@@ -48,7 +52,13 @@
                 }
                 let ym=year+"-"+month;
                 this.startDate=ym+"-"+"01";
-                this.endDate=ym+"-"+lastDay
+                this.endDate=ym+"-"+lastDay;
+                this.getBankAccount();
+            },
+
+            init(){
+                this.monthValue=new Date();
+                this.monthChange(this.monthValue);
             },
             doSelect() {
                 this.getBankAccount();
@@ -70,6 +80,9 @@
         },
         components: {
             "bank-account-list": BankAccountList
+        },
+        created() {
+            this.init();
         }
     }
 </script>

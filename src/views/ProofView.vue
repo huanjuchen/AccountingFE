@@ -25,7 +25,7 @@
             <el-button size="small" type="primary" @click="createVisible=true">创建</el-button>
             </p>
         </el-card>
-        <el-card :style="{marginTop:15+'px'}">
+        <el-card :style="{marginTop:15+'px'}" v-if="proofList!=null&&proofList.length>0">
             <proof-list :page="page" :page-size="pageSize" :loading="loading" :proof-total="proofTotal" :user="user"
                         :proof-list="proofList" @viewDetail="doViewDetail" @verifyProof="doVerifyProof"
                         @pageChange="doPageChange" @pageSizeChange="doPageSizeChange" @trashProof="doTrash"/>

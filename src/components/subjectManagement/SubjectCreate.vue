@@ -20,7 +20,8 @@
             </el-form-item>
 
             <el-form-item prop="parentId" label="一级科目">
-                <el-select  size="small" filterable remote :remote-method="doGetParentList" v-model="subjectObj.parentId">
+                <el-select size="small" filterable remote :remote-method="doGetParentList"
+                           v-model="subjectObj.parentId">
                     <el-option
                             v-for="item in parentList"
                             :key="item.id"
@@ -52,7 +53,7 @@
 </template>
 
 <script>
-    import {createSubjectApi,getSubjectListApi} from "../../api/subjectApi";
+    import {createSubjectApi, getSubjectListApi} from "../../api/subjectApi";
 
     export default {
         name: "SubjectCreate",
@@ -62,9 +63,9 @@
                     code: "",
                     name: "",
                     category: null,
-                    parentId:null,
+                    parentId: null,
                     remark: "",
-                    loading:false
+                    loading: false
                 },
                 subjectList: null,
                 rules: {
@@ -103,11 +104,15 @@
                         value: 5
                     },
                     {
-                        label: "损益类",
+                        label: "损益类-收入",
                         value: 6
+                    },
+                    {
+                        label: "损益类-费用",
+                        value: 7
                     }
                 ],
-                parentList:[]
+                parentList: []
             }
         },
 
@@ -115,8 +120,8 @@
             submitForm(formName) {
                 this.$refs[formName].validate(valid => {
                     if (valid) {
-                        if (this.subjectObj.daysKind==null||this.subjectObj.daysKind.length===0){
-                            this.subjectObj.daysKind=0;
+                        if (this.subjectObj.daysKind == null || this.subjectObj.daysKind.length === 0) {
+                            this.subjectObj.daysKind = 0;
                         }
                         createSubjectApi(this.subjectObj)
                             .then(response => {
@@ -126,8 +131,8 @@
                                     this.subjectObj.name = "";
                                     this.subjectObj.remark = "";
                                     this.subjectObj.category = null;
-                                    this.subjectObj.parentId=null;
-                                    this.parentList=[];
+                                    this.subjectObj.parentId = null;
+                                    this.parentList = [];
                                 }
                             });
                     } else {
@@ -139,15 +144,15 @@
             doGetParentList(query) {
                 if (query !== '') {
                     this.loading = true;
-                    getSubjectListApi(query, true, null,0, 1, 15)
+                    getSubjectListApi(query, true, null, 0, 1, 15)
                         .then(response => {
                             if (response && response.data.code === 200) {
                                 this.parentList = response.data.data;
                             }
                             this.loading = false
                         });
-                }else {
-                    this.parentList=[];
+                } else {
+                    this.parentList = [];
                 }
             },
 

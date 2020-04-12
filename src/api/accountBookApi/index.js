@@ -33,16 +33,13 @@ export const getCashAccountApi = (startDate, endDate) => {
 };
 
 
-export const getLedgerAccountApi = (subjectId, startDate, endDate) => {
+export const getLedgerAccountApi = (subjectId, year) => {
     let queryParam = "";
     if (subjectId) {
         queryParam = queryParam + "&subjectId=" + subjectId;
     }
-    if (startDate != null && startDate.length > 0) {
-        queryParam = queryParam + "&startDate=" + startDate;
-    }
-    if (endDate != null && endDate.length > 0) {
-        queryParam = queryParam + "&endDate=" + endDate;
+    if (year!=null){
+        queryParam = queryParam +"&year="+year;
     }
     if (queryParam.length > 0) {
         queryParam = queryParam.substr(1);

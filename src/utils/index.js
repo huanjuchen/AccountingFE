@@ -118,3 +118,15 @@ export const isLeapYear=(year)=>{
         return true;
     } else return year % 4 === 0 && year % 100 !== 0;
 };
+
+export const debitCredit=(val)=>{
+    if (val===0){
+        return "平";
+    } else if (val===-1){
+        return "借";
+    } else if (val===1){
+        return "贷";
+    }
+
+    return null;
+};

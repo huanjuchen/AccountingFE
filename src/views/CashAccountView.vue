@@ -8,8 +8,12 @@
             <el-button size="small" type="primary" @click="doSelect">筛选</el-button>
         </el-card>
 
-        <el-card :style="{marginTop:15+'px'}">
+        <el-card v-if="cashAccountList!=null&&cashAccountList.length>0" :style="{marginTop:15+'px'}">
+            <h2 style="text-align: center">库存现金日记账</h2>
+            <p></p>
             <cash-account-list :loading="loading" :account-list="cashAccountList"/>
+            <p></p>
+            <p></p>
         </el-card>
     </div>
 </template>
@@ -27,6 +31,7 @@
                 endDate: "",
                 //list
                 cashAccountList: [],
+                loading:false,
                 //
                 monthValue: null,
             }
@@ -44,8 +49,14 @@
                 }
                 let ym=year+"-"+month;
                 this.startDate=ym+"-"+"01";
-                this.endDate=ym+"-"+lastDay
+                this.endDate=ym+"-"+lastDay;
+                this.getCashAccount();
             },
+            init(){
+                this.monthValue=new Date();
+                this.monthChange(this.monthValue);
+            },
+
             doSelect() {
                 this.getCashAccount();
             },
@@ -65,6 +76,9 @@
 
         components: {
             "cash-account-list": CashAccountList
+        },
+        created() {
+            this.init();
         }
     }
 </script>

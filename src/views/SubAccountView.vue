@@ -20,12 +20,16 @@
             <el-button size="small" type="primary" @click="doSelect">筛选</el-button>
         </el-card>
 
-        <el-card :style="{marginTop:15+'px'}">
+        <el-card :style="{marginTop:10+'px'}" v-if="accountList!=null&&accountList.length>0">
+            <h2 style="text-align: center">明细分类账</h2>
+            <p></p>
             <div v-if="subject!=null">
-                <b>会计科目：</b>{{subject.name}}
+                <b style="margin-left: 10px">会计科目：</b>{{subject.parent==null?"":subject.parent.name+"——"}}{{subject.name}}
             </div>
-            <hr/>
+            <p></p>
             <sub-account-list :loading="loading" :account-list="accountList" />
+            <p></p>
+            <p></p>
         </el-card>
     </div>
 </template>
@@ -68,7 +72,10 @@
                 }
                 let ym=year+"-"+month;
                 this.startDate=ym+"-"+"01";
-                this.endDate=ym+"-"+lastDay
+                this.endDate=ym+"-"+lastDay;
+                if (this.subjectId!=null){
+                    this.doSelect();
+                }
             },
             doSelect() {
                 this.getAccount();
@@ -112,10 +119,18 @@
                         }
                     })
                 }
+            },
+
+            init(){
+                this.monthValue=new Date();
+                this.monthChange(this.monthValue);
             }
         },
         components:{
             "sub-account-list":SubAccountList
+        },
+        created() {
+            this.init();
         }
     }
 </script>

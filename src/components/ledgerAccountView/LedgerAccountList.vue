@@ -1,19 +1,21 @@
 <template>
     <div>
         <el-table v-loading="loading" :data="accountList" v-if="accountList!=null&&accountList.length>0">
-            <el-table-column label="日期">
+            <el-table-column label="日期" width="150px">
                 <template slot-scope="scope">
                     {{$utils.dateFormatter(scope.row.date)}}
                 </template>
             </el-table-column>
-            <el-table-column label="凭证号" prop="proofId"></el-table-column>
             <el-table-column label="摘要" prop="abstraction"></el-table-column>
             <el-table-column label="借方" prop="debitMoney"></el-table-column>
             <el-table-column label="贷方" prop="creditMoney"></el-table-column>
+            <el-table-column label="借或贷" width="100px">
+                <template slot-scope="scope">
+                    {{$utils.debitCredit(scope.row.mark)}}
+                </template>
+            </el-table-column>
+            <el-table-column label="金额" prop="money"></el-table-column>
         </el-table>
-        <div style="float: right;line-height: 50px">
-            <b>借方总计：</b>{{debitTotal()}}<b>&nbsp;&nbsp;&nbsp;贷方总计：</b>{{creditTotal()}}
-        </div>
     </div>
 </template>
 
