@@ -1,8 +1,8 @@
 <template>
     <div>
         <el-card>
-            年份
-            <el-date-picker @change="yearChange" v-model="yearValue" type="year" size="small" placeholder="选择年份">
+            月份
+            <el-date-picker @change="monthChange" v-model="monthValue" type="month" size="small" placeholder="选择月">
             </el-date-picker>
             科目
             <el-select size="small" :remote-method="doGetSubjectList"
@@ -17,7 +17,7 @@
                 </el-option>
             </el-select>
             &nbsp;&nbsp;&nbsp;
-            <el-button size="small" type="primary" @click="doSelect">筛选</el-button>
+            <el-button size="small" type="primary" @click="doSelect">查看</el-button>
         </el-card>
 
         <el-card :style="{marginTop:10+'px'}" v-if="accountList!=null&&accountList.length>0">
@@ -52,7 +52,9 @@
         data() {
             return {
                 //queryParam
-                year:null,
+                monthValue: null,
+                startDate: "",
+                endDate: "",
                 subjectId: null,
                 subject: null,
                 //subjectList
@@ -66,26 +68,33 @@
             }
         },
         methods: {
-            yearChange(val) {
+            monthChange(val) {
                 let date = new Date(val);
-                this.year=date.getFullYear();
+                let month = date.getMonth() + 1;
+                let year = date.getFullYear();
+                let lastDay=this.$utils.getLastDay(year,month);
+                if (month<10){
+                    month="0"+month;
+                }
+                let ym=year+"-"+month;
+                this.startDate=ym+"-"+"01";
+                this.endDate=ym+"-"+lastDay;
                 if (this.subjectId!=null){
                     this.doSelect();
                 }
             },
-
             doSelect() {
                 this.getAccount();
                 this.getSubject();
             },
 
             init(){
-              this.yearValue=new Date();
-              this.yearChange(this.yearValue);
+              this.monthValue=new Date();
+              this.monthChange(this.monthValue);
             },
             getAccount() {
                 this.loading = true;
-                getLedgerAccountApi(this.subjectId, this.year)
+                getLedgerAccountApi(this.subjectId, this.startDate,this.endDate)
                     .then(response => {
                         if (response && response.data.code === 200) {
                             this.accountList = response.data.data;

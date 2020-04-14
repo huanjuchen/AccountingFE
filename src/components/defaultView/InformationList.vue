@@ -11,6 +11,7 @@
                            :total="total"
                            :page-sizes="[5,7,10,15]"
                            :page-size="pageSize"
+                           :hide-on-single-page="value"
                            layout="prev, pager, next,sizes,total"></el-pagination>
         </div>
     </div>
@@ -27,6 +28,11 @@
             page: Number,
             pageSize: Number,
             loading: Boolean
+        },
+        data(){
+          return{
+              value:true
+          }
         },
         methods: {
             viewDetails(val) {

@@ -1,11 +1,11 @@
 <template>
     <div>
         <el-card>
-            月份
-            <el-date-picker @change="monthChange" v-model="monthValue" type="month" size="small" placeholder="选择月">
-            </el-date-picker>
+            日期范围
+            <el-date-picker @change="rangeDateChange" v-model="rangeDate" type="daterange" size="small"
+                            range-separator="-" start-placeholder="开始日期" end-placeholder="结束日期"></el-date-picker>
             &nbsp;&nbsp;&nbsp;
-            <el-button size="small" type="primary" @click="doSelect">筛选</el-button>
+            <el-button size="small" type="primary" @click="doSelect">查看</el-button>
         </el-card>
 
         <el-card v-if="cashAccountList!=null&&cashAccountList.length>0" :style="{marginTop:15+'px'}">
@@ -33,28 +33,27 @@
                 cashAccountList: [],
                 loading:false,
                 //
-                monthValue: null,
+                rangeDate: []
             }
         },
 
         methods: {
 
-            monthChange(val) {
-                let date = new Date(val);
-                let month = date.getMonth() + 1;
-                let year = date.getFullYear();
-                let lastDay=this.$utils.getLastDay(year,month);
-                if (month<10){
-                    month="0"+month;
+            rangeDateChange() {
+                if (this.rangeDate != null&&this.rangeDate.length>0) {
+                    this.startDate = this.$utils.dateFormatter(this.rangeDate[0]);
+                    this.endDate = this.$utils.dateFormatter(this.rangeDate[1]);
+                    this.getCashAccount();
+                } else {
+                    this.startDate = "";
+                    this.endDate = "";
                 }
-                let ym=year+"-"+month;
-                this.startDate=ym+"-"+"01";
-                this.endDate=ym+"-"+lastDay;
-                this.getCashAccount();
             },
             init(){
-                this.monthValue=new Date();
-                this.monthChange(this.monthValue);
+                let date1=new Date();
+                let date2=new Date();
+                this.rangeDate.push(date1,date2);
+                this.rangeDateChange();
             },
 
             doSelect() {
@@ -65,7 +64,7 @@
                     this.$message.warning("请选择日期");
                     return;
                 }
-                getCashAccountApi(this.startDate, this.endDate, this.page, this.pageSize)
+                getCashAccountApi(this.startDate, this.endDate, null)
                     .then(response => {
                         if (response && response.data.code === 200) {
                             this.cashAccountList = response.data.data;

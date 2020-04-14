@@ -17,7 +17,7 @@
                 </el-option>
             </el-select>
             &nbsp;&nbsp;&nbsp;
-            <el-button size="small" type="primary" @click="doSelect">筛选</el-button>
+            <el-button size="small" type="primary" @click="doSelect">查看</el-button>
         </el-card>
 
         <el-card :style="{marginTop:10+'px'}" v-if="accountList!=null&&accountList.length>0">
@@ -91,7 +91,7 @@
                     this.$message.error("请选择科目");return;
                 }
                 this.loading=true;
-                getSubAccountApi(this.subjectId, this.startDate, this.endDate)
+                getSubAccountApi(this.subjectId, this.startDate, this.endDate,null)
                     .then(response => {
                         if (response && response.data.code === 200) {
                             this.accountList = response.data.data;

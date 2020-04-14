@@ -69,7 +69,9 @@ export const getSubjectCategory = (val) => {
     } else if (val === 5) {
         return "成本类";
     } else if (val === 6) {
-        return "损益类";
+        return "损益类-收入";
+    }else if (val===7) {
+        return "损益类-费用";
     }
 };
 

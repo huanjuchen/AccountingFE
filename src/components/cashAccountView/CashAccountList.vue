@@ -23,6 +23,11 @@
             accountList: Array,
             loading: Boolean
         },
+        data() {
+            return {
+                hideOnOne: true
+            }
+        },
         methods: {
             debitTotal() {
                 if (this.accountList != null && this.accountList.length > 0) {
@@ -56,6 +61,7 @@
                     return 0;
                 }
             }
+
         }
     }
 </script>

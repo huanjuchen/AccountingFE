@@ -20,7 +20,7 @@
                            :value="item.value"></el-option>
             </el-select>
             <p style="text-align: center">
-            <el-button size="small" type="primary" @click="doSelect">筛选</el-button>
+            <el-button size="small" type="primary" @click="doSelect">查看</el-button>
             <el-button size="small" type="primary" @click="queryParamReset">重置</el-button>
             <el-button size="small" type="primary" @click="createVisible=true">创建</el-button>
             </p>

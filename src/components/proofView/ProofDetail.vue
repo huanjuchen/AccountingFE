@@ -1,8 +1,15 @@
 <template>
     <div>
         <el-card v-if="proof!=null">
-            <div class="proofTitle">记 账 凭 证</div>
-            <div class="proofDate">{{this.$utils.dateFormatter(proof.date)}}</div>
+            <div style="font-size: 28px;font-weight: bold;text-align: center">记 账 凭 证</div>
+            <p></p>
+            <div style="width: 100%">
+                <div style="width: 55%;float: right">{{this.$utils.dateFormatter(proof.date)}}
+                    <div style="float: right;margin-right: 5%"><b>凭证编号：</b>{{proof.id}}</div>
+                </div>
+                <p></p>
+                <p></p>
+            </div>
             <el-table
                     style="width: 100%"
                     :data="proof.items"
