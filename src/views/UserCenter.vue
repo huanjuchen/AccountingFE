@@ -1,7 +1,7 @@
 <template>
     <el-card>
         <h2>信息</h2>
-        <el-divider></el-divider>
+        <p></p>
         <div v-if="userInfo!=null">
             <p><b>编号：</b>{{userInfo.id}}</p>
             <p><b>用户名：</b>{{userInfo.username}}</p>
@@ -9,7 +9,8 @@
             <p><b>角色：</b>{{this.$utils.getRole(userInfo.role)}}</p>
             <p><b>电话：</b>{{userInfo.phone}}</p>
             <p><b>加入时间：</b>{{this.$utils.dateFormatter(userInfo.joinTime)}}</p>
-            <el-divider></el-divider>
+            <p></p>
+
             <el-button size="medium" @click="doChangePwd" type="primary">修改密码</el-button>
             <el-button size="medium" @click="doChangeName" type="primary">更正姓名</el-button>
             <el-button size="medium" @click="doChangePhone" type="primary">修改电话</el-button>

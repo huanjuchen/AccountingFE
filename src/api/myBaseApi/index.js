@@ -8,9 +8,9 @@ import router from "@/router";
 import { Message } from "element-ui";
 
 
-const urlPrefix="/api";
+// const urlPrefix="/api";
 
-// const urlPrefix="";
+const urlPrefix="";
 
 //默认8秒超时
 axios.defaults.timeout = 8000;

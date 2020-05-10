@@ -7,8 +7,7 @@
                     <el-button style="float: right;padding: 0" type="text" @click="viewDetails(information.id)">查看</el-button>
                 </div>
             </div>
-            <hr/>
-
+            <p></p>
             <div>
                 {{informationDesc(information.content)}}
             </div>

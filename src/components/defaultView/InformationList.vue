@@ -5,7 +5,7 @@
                 <information-list-item :information="item" @viewDetails="viewDetails"/>
             </div>
         </div>
-        <el-divider></el-divider>
+        <h2></h2>
         <div style="text-align: center">
             <el-pagination @size-change="pageSizeChange" @current-change="pageChange" background
                            :total="total"

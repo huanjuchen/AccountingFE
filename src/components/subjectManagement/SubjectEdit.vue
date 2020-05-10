@@ -115,8 +115,12 @@
                         value: 5
                     },
                     {
-                        label: "损益类",
+                        label: "损益类-收入",
                         value: 6
+                    },
+                    {
+                        label: "损益类-费用",
+                        value: 7
                     }
                 ]
             }
